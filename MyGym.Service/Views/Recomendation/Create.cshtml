@@ -1,0 +1,90 @@
+﻿@model MyGym.Service.Controllers.RecomendationModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/MainLayout.cshtml";
+}
+<script src="~/Public/jquery.js"></script>
+<script type="text/javascript">
+    function AddTiempoComida() {
+        var value = $("#tiemposcomida").val();
+        var text = $("#tiemposcomida").val();
+        var input = $("<input>", {
+            type: 'hidden',
+            value: value,
+            name: 'tiemposdecomida'
+        });
+        $("#contenttiemposcomida").append(input);
+        $("#contenttiemposcomida").append("<b>" + text + "</b>");
+        $("#contenttiemposcomida").append("<br />");
+    }
+    function GroupChange() {
+        var groupid = $("#grupos").val();
+        alert('Change ' + groupid);
+        $.get('/Recomendation/GetFoods', { groupid : groupid}, function (data) {
+            alert(data);
+        });
+    }
+</script>
+<h2>Recomendacion</h2>
+<form action="/Recomendation/Create" method="post">
+    <table>
+        <tr>
+            <td>Nombre : </td>
+            <td>
+                <input type="text" name="recomendation.Nombre" />
+            </td>
+        </tr>
+        <tr>
+            <td>Proparacion: </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" name="recomendation.Preparacion" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Tiempos de Comida : 
+            </td>
+            <td>
+                <select id="tiemposcomida">
+                    @foreach (var item in Model.TiemposComida)
+                    {
+                        <option value="@item.TiempoDeComidaID">@item.Nombre</option>
+                    }
+                </select>
+            </td>
+            <td>
+                <input type="button" value="Add" onclick="AddTiempoComida()" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="contenttiemposcomida"></div>
+            </td>
+        </tr>
+        <tr>
+            <td>Ingredientes</td>
+        </tr>
+        <tr>
+            <td>Grupo : </td>
+            <td>
+                <select id="grupos" onchange="GroupChange()">
+                    @foreach (var item in Model.Grupos)
+                    {
+                        <option value="@item.GrupoID">@item.Nombre</option>
+                    }
+                </select>
+            </td>
+            <td>Alimentos</td>
+            <td>
+                <select id="alimentos"></select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="Guardar" />
+            </td>
+        </tr>
+    </table>
+</form>

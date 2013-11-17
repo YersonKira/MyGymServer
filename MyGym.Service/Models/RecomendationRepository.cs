@@ -33,12 +33,30 @@ namespace MyGym.Service.Models
             }
             try
             {
-                
+                recomendation.Calorias = rec.Calorias;
+                recomendation.Grasas = rec.Grasas;
+                recomendation.HidratosDeCarbono = rec.HidratosDeCarbono;
+                recomendation.Nombre = rec.Nombre;
+                recomendation.Preparacion = rec.Preparacion;
+                recomendation.Proteinas = rec.Proteinas;
+                MyGymContext.DB.SaveChanges();
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
+            }
+        }
+        public int Add(Recomendacion rec)
+        {
+            try
+            {
+                MyGymContext.DB.Recomendacion.Add(rec);
+                return MyGymContext.DB.SaveChanges();
+            }
+            catch (Exception)
+            {
+                return 0;
             }
         }
     }

@@ -44,96 +44,142 @@ namespace MyGym.Data
         public MyGymContext()
             : base("MyGymDB")
         {
-            
+           
         }
     }
     public class MyGymInitializer : DropCreateDatabaseAlways<MyGymContext>
     {
         protected override void Seed(MyGymContext context)
         {
-            //#region Usuario
-            //context.Usuario.Add(new Usuario()
-            //{
-            //    ComplexionFisica = ComplexionFisica.Mediana,
-            //    Email = "yerson_kira@hotmail.com",
-            //    Estatura = 1.75,
-            //    FechaNacimiento = new DateTime(1991, 1, 25),
-            //    Materno = "Pariapaza",
-            //    Nick = "Yerson",
-            //    Nombre = "Yerson Marvin",
-            //    Password = "123456",
-            //    Paterno = "Copa",
-            //    Peso = 59,
-            //    Sexo = Common.Enum.Sexo.Masculino,
-            //});
-            //context.SaveChanges();
-            //#endregion
-            //#region Alimentos
-
-            //#endregion
-            //#region Recomendaciones
-            //context.Recomendacion.Add(new Recomendacion()
-            //{
-            //    Nombre = "Arroz con Leche",
-            //    Calorias = 200,
-            //    Proteinas = 300,
-            //    HidratosDeCarbono = 150,
-            //    Grasas = 350
-            //});
-            //context.Recomendacion.Add(new Recomendacion()
-            //{
-            //    Nombre = "Batido Natural con Trozos de Kiwi",
-            //    Calorias = 200,
-            //    Proteinas = 300,
-            //    HidratosDeCarbono = 150,
-            //    Grasas = 350
-            //});
-            //context.SaveChanges();
-            //#endregion
-            //#region Dieta
-            //context.Dieta.Add(new Dieta()
-            //{
-            //    UsuarioID = 1,
-            //    Dia = Dia.Lunes,
-            //    Calorias = 300,
-            //    Grasas = 100,
-            //    Proteinas = 200,
-            //    HidratosCarbono = 200
-            //});
-            //#endregion
-            //#region Tiempos de Comida
-            //context.TiempoDeComida.Add(new TiempoDeComida()
-            //{
-            //    Nombre = TiempoComida.Desayuno,
-            //    HoraInicio = new TimeSpan(6, 0, 0),
-            //    HoraFinal = new TimeSpan(10, 0, 0)
-            //});
-            //context.TiempoDeComida.Add(new TiempoDeComida()
-            //{
-            //    Nombre = TiempoComida.Merienda,
-            //    HoraInicio = new TimeSpan(10, 0, 0),
-            //    HoraFinal = new TimeSpan(12, 0, 0)
-            //});
-            //context.TiempoDeComida.Add(new TiempoDeComida()
-            //{
-            //    Nombre = TiempoComida.Almuerzo,
-            //    HoraInicio = new TimeSpan(12, 0, 0),
-            //    HoraFinal = new TimeSpan(14, 0, 0)
-            //});
-            //context.TiempoDeComida.Add(new TiempoDeComida()
-            //{
-            //    Nombre = TiempoComida.Merienda,
-            //    HoraInicio = new TimeSpan(14, 0, 0),
-            //    HoraFinal = new TimeSpan(18, 0, 0)
-            //});
-            //context.TiempoDeComida.Add(new TiempoDeComida()
-            //{
-            //    Nombre = TiempoComida.Cena,
-            //    HoraInicio = new TimeSpan(18, 0, 0),
-            //    HoraFinal = new TimeSpan(20, 0, 0)
-            //});
-            //context.SaveChanges();
-            //#endregion
+            #region Usuario
+            context.Usuario.Add(new Usuario()
+            {
+                ComplexionFisica = ComplexionFisica.Mediana,
+                Email = "yerson_kira@hotmail.com",
+                Estatura = 1.75,
+                FechaNacimiento = new DateTime(1991, 1, 25),
+                Materno = "Pariapaza",
+                Nick = "Yerson",
+                Nombre = "Yerson Marvin",
+                Password = "123456",
+                Paterno = "Copa",
+                Peso = 59,
+                Sexo = Common.Enum.Sexo.Masculino,
+            });
+            context.SaveChanges();
+            #endregion
+            #region Grupos
+            context.Grupo.Add(new Grupo() { 
+                Nombre = "Verduras",
+                RecomendacionMaxima = 10,
+                RecomendacionMinima = 5
+            });
+            context.Grupo.Add(new Grupo()
+            {
+                Nombre = "Lacteos",
+                RecomendacionMaxima = 10,
+                RecomendacionMinima = 5
+            });
+            context.Grupo.Add(new Grupo()
+            {
+                Nombre = "Carnes",
+                RecomendacionMaxima = 10,
+                RecomendacionMinima = 5
+            });
+            context.SaveChanges();
+            #endregion
+            #region Alimentos
+            context.Alimento.Add(new Alimento() { 
+                Nombre = "Carne de Pollo",
+                Calorias = 100,
+                Grasas = 123,
+                GrupoID = 3,
+                HidratosDeCarbono = 200,
+                Proteinas = 150                
+            });
+            context.Alimento.Add(new Alimento()
+            {
+                Nombre = "Tomate",
+                Calorias = 100,
+                Grasas = 123,
+                GrupoID = 1,
+                HidratosDeCarbono = 200,
+                Proteinas = 150
+            });
+            context.Alimento.Add(new Alimento()
+            {
+                Nombre = "Leche de Soya",
+                Calorias = 100,
+                Grasas = 123,
+                GrupoID = 2,
+                HidratosDeCarbono = 200,
+                Proteinas = 150
+            });
+            context.SaveChanges();
+            #endregion
+            #region Recomendaciones
+            context.Recomendacion.Add(new Recomendacion()
+            {
+                Nombre = "Arroz con Leche",
+                Calorias = 200,
+                Proteinas = 300,
+                HidratosDeCarbono = 150,
+                Grasas = 350
+            });
+            context.Recomendacion.Add(new Recomendacion()
+            {
+                Nombre = "Batido Natural con Trozos de Kiwi",
+                Calorias = 200,
+                Proteinas = 300,
+                HidratosDeCarbono = 150,
+                Grasas = 350
+            });
+            context.SaveChanges();
+            #endregion
+            #region Dieta
+            context.Dieta.Add(new Dieta()
+            {
+                UsuarioID = 1,
+                Dia = Dia.Lunes,
+                Calorias = 300,
+                Grasas = 100,
+                Proteinas = 200,
+                HidratosCarbono = 200
+            });
+            #endregion
+            #region Tiempos de Comida
+            context.TiempoDeComida.Add(new TiempoDeComida()
+            {
+                Nombre = TiempoComida.Desayuno,
+                HoraInicio = new TimeSpan(6, 0, 0),
+                HoraFinal = new TimeSpan(10, 0, 0)
+            });
+            context.TiempoDeComida.Add(new TiempoDeComida()
+            {
+                Nombre = TiempoComida.Merienda,
+                HoraInicio = new TimeSpan(10, 0, 0),
+                HoraFinal = new TimeSpan(12, 0, 0)
+            });
+            context.TiempoDeComida.Add(new TiempoDeComida()
+            {
+                Nombre = TiempoComida.Almuerzo,
+                HoraInicio = new TimeSpan(12, 0, 0),
+                HoraFinal = new TimeSpan(14, 0, 0)
+            });
+            context.TiempoDeComida.Add(new TiempoDeComida()
+            {
+                Nombre = TiempoComida.Merienda,
+                HoraInicio = new TimeSpan(14, 0, 0),
+                HoraFinal = new TimeSpan(18, 0, 0)
+            });
+            context.TiempoDeComida.Add(new TiempoDeComida()
+            {
+                Nombre = TiempoComida.Cena,
+                HoraInicio = new TimeSpan(18, 0, 0),
+                HoraFinal = new TimeSpan(20, 0, 0)
+            });
+            context.SaveChanges();
+            #endregion
             //#region Ejercicios
             //#region Gimnasia
             //{
@@ -146,7 +192,7 @@ namespace MyGym.Data
             //}
             //#endregion
             //#endregion
-            //base.Seed(context);
+            base.Seed(context);
         }
     }
 }

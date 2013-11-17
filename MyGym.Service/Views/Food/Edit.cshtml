@@ -1,5 +1,87 @@
-﻿@{
+﻿@model MyGym.Data.Entities.Alimento
+@{
     ViewBag.Title = "Edit";
+    Layout = "~/Views/MainLayout.cshtml";   
 }
-
-<h2>Edit</h2>
+<script src="~/Public/jquery.js"></script>
+<script type="text/javascript">
+    $.fn.serializeObject = function () {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function () {
+            if (o[this.name] !== undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+    function SaveFood() {
+        var json = $('#foodform').serializeObject();
+        $.post('/Food/Update', { foodid: json.AlimentoID, fooddata: JSON.stringify(json) }, function (res) {
+            window.location.href = res.Url;
+        });
+    }
+</script>
+<form id="foodform" >
+    <table>
+        <tr>
+            <td>Nombre: </td>
+            <td>
+                <input type="hidden" name="AlimentoID" value="@Model.AlimentoID" />
+                <input type="text" name="Nombre" value="@Model.Nombre" />
+            </td>
+        </tr>
+        <tr>
+            <td>Calorias: </td>
+            <td>
+                <input type="text" name="Calorias" value="@Model.Calorias" />
+            </td>
+        </tr>
+        <tr>
+            <td>Proteinas: </td>
+            <td>
+                <input type="text" name="Proteinas" value="@Model.Proteinas" />
+            </td>
+        </tr>
+        <tr>
+            <td>Grasas</td>
+            <td>
+                <input type="text" name="Grasas" value="@Model.Grasas" />
+            </td>
+        </tr>
+        <tr>
+            <td>Hidratos de Carbono</td>
+            <td>
+                <input type="text" name="HidratosDeCarbono" value="@Model.HidratosDeCarbono"  />
+            </td>
+        </tr>
+        <tr>
+            <td>Grupo</td>
+            <td>
+                <select name="GrupoID">
+                    @foreach (var item in ViewBag.Grupos)
+                    {
+                        if (item.GrupoID == Model.GrupoID)
+                        {
+                            <option value="@item.GrupoID" selected="selected">@item.Nombre</option>    
+                        }
+                        else
+                        {
+                            <option value="@item.GrupoID">@item.Nombre</option>   
+                        }
+                    }
+                </select>
+            </td>
+        </tr>    
+        <tr>
+            <td>
+                <input type="button" name="name" value=" " onclick="SaveFood()" />
+            </td>
+        </tr>
+    </table>
+</form>

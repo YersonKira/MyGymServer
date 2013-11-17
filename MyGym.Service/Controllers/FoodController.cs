@@ -20,7 +20,8 @@ namespace MyGym.Service.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            return View();
+            var groups = new GroupRepository().GetAll();
+            return View(groups);
         }
         [HttpPost]
         public JsonResult Create(string fooddata)
@@ -28,7 +29,7 @@ namespace MyGym.Service.Controllers
             Alimento food = JsonConvert.DeserializeObject<Alimento>(fooddata);
             string redirect = new UrlHelper(Request.RequestContext).Action("Index");
             var result = new FoodRepository().Add(food);
-            if (result == null)
+            if (result == 0)
             {
                 redirect = new UrlHelper(Request.RequestContext).Action("Create");
             }
@@ -37,6 +38,7 @@ namespace MyGym.Service.Controllers
         [HttpGet]
         public ActionResult Edit(int foodid)
         {
+            ViewBag.Grupos = new GroupRepository().GetAll();
             var result = new FoodRepository().Get(foodid);
             return View(result);
         }
@@ -48,5 +50,12 @@ namespace MyGym.Service.Controllers
             string redirect = new UrlHelper(Request.RequestContext).Action("Index");
             return Json(new { Url = redirect });
         }
+        [HttpGet]
+        public ActionResult Delete(int foodid)
+        {
+            new FoodRepository().Delete(foodid);
+            return RedirectToAction("Index");
+        }
+
     }
 }

@@ -23,6 +23,7 @@ namespace MyGym.Service.Models
             if (food != null)
             {
                 MyGymContext.DB.Alimento.Remove(food);
+                MyGymContext.DB.SaveChanges();
             }
         }
         public void Update(int foodid, Alimento food)
@@ -54,6 +55,10 @@ namespace MyGym.Service.Models
             {
                 return 0;
             }
+        }
+        public IEnumerable<Alimento> GetByGroupID(int groupid)
+        {
+            return MyGymContext.DB.Alimento.Where(item => item.GrupoID == groupid);
         }
     }
 }

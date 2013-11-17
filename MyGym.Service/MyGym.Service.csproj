@@ -233,18 +233,19 @@
     <None Include="Models\APIHelper\JsonSamples\User\User.Update.Get.json" />
     <Content Include="Views\Recomendation\Index.cshtml" />
     <Content Include="Views\Usuario\Edit.cshtml" />
-    <Content Include="Views\Food\Create.cshtml" />
-    <Content Include="Views\Food\Edit.cshtml" />
-    <Content Include="Views\Food\Index.cshtml" />
-    <Content Include="Views\Group\Create.cshtml" />
-    <Content Include="Views\Group\Edit.cshtml" />
-    <Content Include="Views\Group\Index.cshtml" />
     <Content Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </Content>
     <None Include="Properties\PublishProfiles\mygymservice - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\mygymservice - Web Deploy.pubxml" />
+    <Content Include="Views\Food\Create.cshtml" />
+    <Content Include="Views\Food\Edit.cshtml" />
+    <Content Include="Views\Food\Index.cshtml" />
+    <Content Include="Views\Group\Create.cshtml" />
+    <Content Include="Views\Group\Edit.cshtml" />
+    <Content Include="Views\Group\Index.cshtml" />
+    <Content Include="Views\Recomendation\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201311170232363_InitialCreate.resx">
