@@ -1,0 +1,126 @@
+﻿@using MyGym.Common.Enum
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/MainLayout.cshtml";
+}
+<script type="text/javascript">
+    function Send() {
+        var json = $("#registerform").serializeObject();
+        $.post('/Usuario/Register', { userdata: JSON.stringify(json) }, function (response) {
+            window.location.href = response.Url;
+        });
+    }
+</script>
+<h1>Formulario de Registro
+</h1>
+<form id="registerform" action="/Usuario/Register" method="post">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            Informacion Personal
+        </div>
+        <div class="panel-body">
+            <table>
+                <tr>
+                    <td><label>Nombres</label></td>
+                    <td><input type="text" name="Names" placeholder="Juan Carlos" class="form-control" /></td>
+                </tr>
+                <tr>
+                    <td><label>Apellido Paterno</label></td>
+                    <td><input type="text" name="FirstName" placeholder="Cortez" class="form-control" /></td>
+                </tr>
+                <tr>
+                    <td><label>Apellido Materno</label></td>
+                    <td><input type="text" name="LastName" placeholder="Fernandez" class="form-control" /></td>
+                </tr>
+                <tr>
+                    <td><label>Fecha de Nacimiento</label></td>
+                    <td><input type="date" name="DateOfBirth" class="form-control" /></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            Informacion de Cuenta
+        </div>
+        <div class="panel-body">
+            <table>
+                <tr>
+                    <td><label>Email</label></td>
+                    <td><input type="email" name="Email" class="form-control" /></td>
+                </tr>
+                <tr>
+                    <td><label>Nick : </label></td>
+                    <td><input type="text" name="Nick" placeholder="Juan" class="form-control" /></td>
+                </tr>
+                <tr>
+                    <td><label>Contraseña : </label></td>
+                    <td><input type="password" name="Password" class="form-control" /></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            Informacion Fisica
+        </div>
+        <div class="panel-body">
+            <table>
+                <tr>
+                    <td><label>Peso</label></td>
+                    <td>
+                        <div class="input-group">
+                            <input type="text" name="Weight" placeholder="69" class="form-control" />
+                            <span class="input-group-addon">grs</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Altura</label></td>
+                    <td>
+                        <div class="input-group">
+                            <input type="text" name="Heigth" placeholder="1.70" class="form-control" />
+                            <span class="input-group-addon">mts</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Sexo</label></td>
+                    <td>
+                        <select name="Sex">
+                            <option value="Femenino">@Sexo.Femenino</option>
+                            <option value="Masculino">@Sexo.Masculino</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Complexion Fisica</label></td>
+                    <td>
+                        <select name="PhysicalComplexion">
+                            <option value="@ComplexionFisica.Pequena">@ComplexionFisica.Pequena</option>
+                            <option value="@ComplexionFisica.Mediana">@ComplexionFisica.Mediana</option>
+                            <option value="@ComplexionFisica.Grande">@ComplexionFisica.Grande</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Nivel de Actividad</label></td>
+                    <td>
+                        <select name="LevelActivity">
+                            <option value="@Nivel.MuyLeve">Muy Leve</option>
+                            <option value="@Nivel.Leve">Leve</option>
+                            <option value="@Nivel.Moderado">Moderado</option>
+                            <option value="@Nivel.Intenso">Intenso</option>
+                            <option value="@Nivel.Excepcional">Excepcional</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="button" value="Enviar" class="btn btn-default" onclick="Send()" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>

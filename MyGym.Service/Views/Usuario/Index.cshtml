@@ -1,0 +1,7 @@
+﻿@model MyGym.Data.Entities.Usuario
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/MainLayout.cshtml";
+}
+<h1>Bienvenido @Model.Nombre</h1>
+<a href="/Usuario/Edit?userid=@Model.UsuarioID">Editar</a>
