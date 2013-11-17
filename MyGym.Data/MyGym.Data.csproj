@@ -67,6 +67,10 @@
     <Compile Include="Migrations\201311170234500_Initial.Designer.cs">
       <DependentUpon>201311170234500_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201311171450341_Second.cs" />
+    <Compile Include="Migrations\201311171450341_Second.Designer.cs">
+      <DependentUpon>201311171450341_Second.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MyGymContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -87,6 +91,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201311170234500_Initial.resx">
       <DependentUpon>201311170234500_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311171450341_Second.resx">
+      <DependentUpon>201311171450341_Second.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
