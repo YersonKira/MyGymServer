@@ -12,7 +12,7 @@ namespace MyGym.Service.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(MyGym.Service.Models.APIHelper.APIHelper context)

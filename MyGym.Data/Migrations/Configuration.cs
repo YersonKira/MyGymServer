@@ -1,5 +1,7 @@
 namespace MyGym.Data.Migrations
 {
+    using MyGym.Common.Enum;
+    using MyGym.Data.Entities;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -9,23 +11,26 @@ namespace MyGym.Data.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(MyGym.Data.MyGymContext context)
         {
-            //  This method will be called after migrating to the latest version.
-
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+            context.Usuario.Add(new Usuario()
+            {
+                ComplexionFisica = ComplexionFisica.Mediana,
+                Email = "yerson_kira@hotmail.com",
+                Estatura = 1.75,
+                FechaNacimiento = new DateTime(1991, 1, 25),
+                Materno = "Pariapaza",
+                Nick = "Yerson",
+                Nombre = "Yerson Marvin",
+                Password = "123456",
+                Paterno = "Copa",
+                Peso = 59,
+                Sexo = Common.Enum.Sexo.Masculino,
+            });
+            context.SaveChanges();
         }
     }
 }
