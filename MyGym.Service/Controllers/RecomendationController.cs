@@ -17,9 +17,9 @@ namespace MyGym.Service.Controllers
             return View(MyGymContext.DB.Recomendacion.ToList());
         }
         [HttpGet]
-        public ActionResult Delete(int RecomendacionID)
+        public ActionResult Delete(int recomendationid)
         {
-            new RecomendationRepository().Delete(RecomendacionID);
+            new RecomendationRepository().Delete(recomendationid);
             return RedirectToAction("Index");
         }
         [HttpGet]
@@ -30,15 +30,22 @@ namespace MyGym.Service.Controllers
             return View(new RecomendationModel() { TiemposComida = tiemposcomida, Grupos = grupos});
         }
         [HttpPost]
-        public ActionResult Create(Recomendacion recomendation, IEnumerable<int> tiemposdecomida, string urlimage)
+        public ActionResult Create(Recomendacion recomendation, IEnumerable<int> tiemposdecomida, string urlimage, IEnumerable<SeConforma> alimentos)
         {
-            return Json(new { rec = recomendation, tc = tiemposdecomida, urlimage = urlimage }, JsonRequestBehavior.AllowGet);
+            new RecomendationRepository().Add(recomendation, tiemposdecomida, urlimage, alimentos);
+            return RedirectToAction("Index");
         }
         [HttpGet]
         public ActionResult GetFoods(int groupid)
         {
             var result = new FoodRepository().GetByGroupID(groupid).Select(item => new { id = item.AlimentoID, name = item.Nombre}); ;
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        public ActionResult Get(int recomendationid)
+        {
+            var result = new RecomendationRepository().Get(recomendationid);
+            return View();
         }
     }
     public class RecomendationModel

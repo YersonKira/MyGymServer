@@ -22,17 +22,30 @@
         $.get('/Recomendation/GetFoods', { groupid: groupid }, function (data) {
             $("#alimentos").empty();
             $.each(data, function (i, item) {
-                $("#alimentos").append("<option id='" + item.id +"'>" + item.name + "</option>");
+                $("#alimentos").append("<option value=" + item.id +">" + item.name + "</option>");
             });
+            
         });
     }
     function AddAlimento() {
         var alimentoid = $("#alimentos").val();
-        var index = $("#contenedoralimentos").length;
-        $("#contenedoralimentos").append(createAlimento(alimentoid));
+        var index = $("#contenedoralimentos").children().length;
+        alert(index);
+        $("#contenedoralimentos").append(createAlimento(alimentoid, index));
     }
     function createAlimento(alimentoid, index) {
-
+        return $("<div></div").append(
+                $("<input />").attr({
+                    name: "alimentos[" + index + "].Cantidad",
+                    type: "text"
+                })
+            ).append("<b>" + alimentoid + "</b>").append(
+                $("<input />").attr({
+                    name: "alimentos[" + index + "].AlimentoID",
+                    type: "hidden",
+                    value: alimentoid
+                })
+            );
     }
 </script>
 <h2>Recomendacion</h2>

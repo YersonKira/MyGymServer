@@ -47,16 +47,39 @@ namespace MyGym.Service.Models
                 return false;
             }
         }
-        public int Add(Recomendacion rec)
+        public bool Add(Recomendacion rec, IEnumerable<int> tiemposComida, string urlimage, IEnumerable<SeConforma> alimentos)
         {
             try
             {
-                MyGymContext.DB.Recomendacion.Add(rec);
-                return MyGymContext.DB.SaveChanges();
+                var recomendation = MyGymContext.DB.Recomendacion.Add(rec);
+                MyGymContext.DB.SaveChanges();
+                foreach (var item in tiemposComida)
+                {
+                    MyGymContext.DB.SeRecomienda.Add(new SeRecomienda() { 
+                        RecomendacionID = recomendation.RecomendacionID,
+                        TiempoDeComidaID = item
+                    });
+                    MyGymContext.DB.SaveChanges();
+                }
+                foreach (var item in alimentos)
+                {
+                    SeConforma alimento = MyGymContext.DB.SeConforma.Add(new SeConforma() { 
+                        AlimentoID = item.AlimentoID,
+                        Cantidad = item.Cantidad,
+                        RecomendacionID = recomendation.RecomendacionID
+                    });
+                    MyGymContext.DB.SaveChanges();
+                    recomendation.Proteinas += alimento.Alimento.Proteinas * (item.Cantidad / 100);
+                    recomendation.Calorias += alimento.Alimento.Calorias * (item.Cantidad / 100);
+                    recomendation.Grasas += alimento.Alimento.Grasas * (item.Cantidad / 100);
+                    recomendation.HidratosDeCarbono += alimento.Alimento.HidratosDeCarbono * (item.Cantidad / 100);
+                }
+                MyGymContext.DB.SaveChanges();
+                return true;
             }
             catch (Exception)
             {
-                return 0;
+                return false;
             }
         }
     }
