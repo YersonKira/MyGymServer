@@ -35,9 +35,9 @@ namespace MyGym.Service.Controllers
             return Json(new { rec = recomendation, tc = tiemposdecomida, urlimage = urlimage }, JsonRequestBehavior.AllowGet);
         }
         [HttpGet]
-        public JsonResult GetFoods(int groupid)
+        public ActionResult GetFoods(int groupid)
         {
-            var result = new FoodRepository().GetByGroupID(groupid).ToList();
+            var result = new FoodRepository().GetByGroupID(groupid).Select(item => new { id = item.AlimentoID, name = item.Nombre}); ;
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

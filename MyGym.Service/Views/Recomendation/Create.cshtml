@@ -19,10 +19,20 @@
     }
     function GroupChange() {
         var groupid = $("#grupos").val();
-        alert('Change ' + groupid);
-        $.get('/Recomendation/GetFoods', { groupid : groupid}, function (data) {
-            alert(data);
+        $.get('/Recomendation/GetFoods', { groupid: groupid }, function (data) {
+            $("#alimentos").empty();
+            $.each(data, function (i, item) {
+                $("#alimentos").append("<option id='" + item.id +"'>" + item.name + "</option>");
+            });
         });
+    }
+    function AddAlimento() {
+        var alimentoid = $("#alimentos").val();
+        var index = $("#contenedoralimentos").length;
+        $("#contenedoralimentos").append(createAlimento(alimentoid));
+    }
+    function createAlimento(alimentoid, index) {
+
     }
 </script>
 <h2>Recomendacion</h2>
@@ -76,9 +86,19 @@
                     }
                 </select>
             </td>
+        </tr>
+        <tr>
             <td>Alimentos</td>
             <td>
                 <select id="alimentos"></select>
+            </td>
+            <td>
+                <input type="button" value="Add Alimento" onclick="AddAlimento()" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="contenedoralimentos"></div>
             </td>
         </tr>
         <tr>
