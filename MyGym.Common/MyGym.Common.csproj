@@ -50,6 +50,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserDiet.cs" />
     <Compile Include="UserExercise.cs" />
+    <Compile Include="UserFood.cs" />
+    <Compile Include="UserRecomendation.cs" />
     <Compile Include="UserRecord.cs" />
     <Compile Include="UserInformation.cs" />
   </ItemGroup>

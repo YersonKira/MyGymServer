@@ -24,6 +24,7 @@ namespace MyGym.Service.Controllers.API
         {
             var result = new UserRepository().Get(userid);
             return Json(result, JsonRequestBehavior.AllowGet);
+            
         }
         [HttpPost]
         [APIErrorHandler]

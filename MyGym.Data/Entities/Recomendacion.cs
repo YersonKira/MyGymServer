@@ -23,7 +23,8 @@ namespace MyGym.Data.Entities
 
         [Column(TypeName = "image")]
         public byte[] Image { get; set; }
-
+        // Image url
+        public string ImageUrl { get; set; }
         public virtual ICollection<SeConforma> SeConforma { get; set; }
         public virtual ICollection<SeRecomienda> SeRecomiendaEn { get; set; }
         public virtual ICollection<Tiene> Tiene { get; set; }

@@ -31,7 +31,7 @@ namespace MyGym.Service.Models
         }
         public object GetUserDiet(int userid, string day)
         {
-            Dia dia = (Dia)Enum.Parse(typeof(Dia), day);
+            Dia dia = (Dia)Enum.Parse(typeof(Dia), day, true);
             var diet = MyGymContext.DB.Dieta.FirstOrDefault(item => item.UsuarioID == userid & item.Dia == dia);
             if (diet == null)
             {
@@ -40,15 +40,15 @@ namespace MyGym.Service.Models
             var recomendations = MyGymContext.DB.Tiene.Where(item => item.DietaID == diet.DietaID);
             if (recomendations.Count() > 0)
             {
-                return APIFunctions.SuccessResult(
-                recomendations.Select(item => new UserDiet()
+                var result = recomendations.Select(item => new UserDiet()
                 {
                     DietID = diet.DietaID,
-                    ImageURL = string.Format("http://localhost:8000/images/{0}.jpg", item.RecomendacionID),
+                    ImageURL = item.Recomendacion.ImageUrl,
                     MealTime = new List<TiempoComida>(item.Recomendacion.SeRecomiendaEn.Select(tc => tc.TiempoDeComida.Nombre)),
                     Name = item.Recomendacion.Nombre,
                     RecomendationID = item.RecomendacionID
-                }), JsonMessage.Success);
+                });
+                return APIFunctions.SuccessResult(result, JsonMessage.Success);
             }
             return APIFunctions.ErrorResult(JsonMessage.Error);
         }
@@ -67,7 +67,7 @@ namespace MyGym.Service.Models
                 MyGymContext.DB.SaveChanges();
                 if (user.FechaNacimiento != olddateofbirth | user.Peso != oldweigth | user.Estatura != oldheight)
                 {
-                    new DietRepository().CreateDiet(user.UsuarioID);
+                    this.CreateDiet(user.UsuarioID);
                 }
                 return APIFunctions.SuccessResult(new object(), JsonMessage.Success);
             }

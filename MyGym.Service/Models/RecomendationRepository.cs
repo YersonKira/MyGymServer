@@ -1,5 +1,8 @@
-﻿using MyGym.Data;
+﻿using MyGym.Common;
+using MyGym.Data;
 using MyGym.Data.Entities;
+using MyGym.Service.Controllers.API.ErrorHandler;
+using MyGym.Service.Models.APIHelper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,6 +84,28 @@ namespace MyGym.Service.Models
             {
                 return false;
             }
+        }
+        public object GetUserRecomendation(int recomendationid)
+        {
+            Recomendacion recomendation = Get(recomendationid);
+            if (recomendationid == null)
+            {
+                return APIFunctions.ErrorResult(JsonMessage.NotFound);
+            }
+            UserRecomendation result = new UserRecomendation() { 
+                Name = recomendation.Nombre,
+                Preparation = recomendation.Preparacion,
+                Ingredients = recomendation.SeConforma.Select(item => new UserFood(){
+                    Name = item.Alimento.Nombre,
+                    Amount = item.Cantidad,
+                    Calories = item.Alimento.Calorias,
+                    Carbohydrates = item.Alimento.HidratosDeCarbono,
+                    Grease = item.Alimento.Grasas,
+                    Protein = item.Alimento.Proteinas,
+                    Grupo = item.Alimento.Grupo.Nombre
+                })
+            };
+            return APIFunctions.SuccessResult(result, JsonMessage.Success);
         }
     }
 }
