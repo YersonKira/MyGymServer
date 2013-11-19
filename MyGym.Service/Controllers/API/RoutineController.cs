@@ -10,7 +10,7 @@ using MyGym.Service.Models;
 
 namespace MyGym.Service.Controllers.API
 {
-    public class ExcercieController : Controller
+    public class RoutineController : Controller
     {
         [HttpGet]
         [APIErrorHandler]
@@ -19,6 +19,7 @@ namespace MyGym.Service.Controllers.API
             var result = new RoutineRepository().GenerateRoutine(userID, mode);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
     }
 }
 

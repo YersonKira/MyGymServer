@@ -1,4 +1,5 @@
-﻿using MyGym.Common.Enum;
+﻿using MyGym.Common;
+using MyGym.Common.Enum;
 using MyGym.Data;
 using MyGym.Data.Entities;
 using MyGym.Service.Controllers.API.ErrorHandler;
@@ -21,8 +22,8 @@ namespace MyGym.Service.Models
             {
                 return APIFunctions.ErrorResult(string.Format(JsonMessage.NotFound, "Usuario"));
             }
-
             Rutina rutina = new Rutina();
+            rutina.UsuarioID = user.UsuarioID;
             MyGymContext.DB.Rutina.Add(rutina);
             MyGymContext.DB.SaveChanges();
             DateTime date = new DateTime();
@@ -42,7 +43,7 @@ namespace MyGym.Service.Models
                     MyGymContext.DB.Actividad.Add(activities[i]);
                     MyGymContext.DB.SaveChanges();
                 }
-                return activities;
+                return APIFunctions.SuccessResult(toSerializable(activities), JsonMessage.Success);
             }
             else
             {
@@ -58,12 +59,17 @@ namespace MyGym.Service.Models
                     MyGymContext.DB.Actividad.Add(activities[i]);
                     MyGymContext.DB.SaveChanges();
                 }
-                return activities;
+                return APIFunctions.SuccessResult(toSerializable(activities), JsonMessage.Success);
             }
 
         }
+        private object toSerializable(List<Actividad> activities)
+        {
+            return activities.Select(p => new { Date = p.Fecha, ExerciseID = p.EjercicioID });
+        }
         private IEnumerable<Actividad> GetSorted(bool sw)
         {
+            random = new Random();
             ExerciseRepository repo = new ExerciseRepository();
             List<List<Ejercicio>> lista = new List<List<Ejercicio>>();
             List<Ejercicio> cardio = repo.GetByType(TipoEjercicio.Cardio).ToList();
