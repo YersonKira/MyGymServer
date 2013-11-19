@@ -10,7 +10,7 @@ namespace MyGym.Common
     public class UserDiet
     {
         public int DietID { get; set; }
-        public List<TiempoComida> MealTime { get; set; }
+        public IEnumerable<string> MealTime { get; set; }
 
         public int RecomendationID { get; set; }
         public string Name { get; set; }

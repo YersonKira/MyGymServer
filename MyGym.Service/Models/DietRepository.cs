@@ -40,17 +40,21 @@ namespace MyGym.Service.Models
             var recomendations = MyGymContext.DB.Tiene.Where(item => item.DietaID == diet.DietaID);
             if (recomendations.Count() > 0)
             {
-                var result = recomendations.Select(item => new UserDiet()
+                List<UserDiet> result = new List<UserDiet>();
+                foreach (var item in recomendations)
                 {
-                    DietID = diet.DietaID,
-                    ImageURL = item.Recomendacion.ImageUrl,
-                    MealTime = new List<TiempoComida>(item.Recomendacion.SeRecomiendaEn.Select(tc => tc.TiempoDeComida.Nombre)),
-                    Name = item.Recomendacion.Nombre,
-                    RecomendationID = item.RecomendacionID
-                });
+                    UserDiet userdiet = new UserDiet() {
+                        DietID = diet.DietaID,
+                        ImageURL = item.Recomendacion.ImageUrl,
+                        Name = item.Recomendacion.Nombre,
+                        RecomendationID = item.RecomendacionID
+                    };
+                    userdiet.MealTime = item.Recomendacion.SeRecomiendaEn.Select(tc => tc.TiempoDeComida.Nombre.ToString());
+                    result.Add(userdiet);
+                }
                 return APIFunctions.SuccessResult(result, JsonMessage.Success);
             }
-            return APIFunctions.ErrorResult(JsonMessage.Error);
+            return APIFunctions.ErrorResult(JsonMessage.NotFound);
         }
         public object GenerateDiet(int userid, UserInformation userdata)
         {
