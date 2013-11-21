@@ -5,13 +5,13 @@ namespace MyGym.Data.Migrations
     using System.Data.Entity.Migrations.Infrastructure;
     using System.Resources;
     
-    public sealed partial class Second : IMigrationMetadata
+    public sealed partial class Initial : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Second));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
         
         string IMigrationMetadata.Id
         {
-            get { return "201311171450341_Second"; }
+            get { return "201311202202315_Initial"; }
         }
         
         string IMigrationMetadata.Source

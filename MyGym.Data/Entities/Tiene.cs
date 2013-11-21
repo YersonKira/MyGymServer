@@ -20,5 +20,11 @@ namespace MyGym.Data.Entities
         public virtual Dieta Dieta { get; set; }
         [ForeignKey("RecomendacionID")]
         public virtual Recomendacion Recomendacion { get; set; }
+
+        public Tiene()
+        {
+            //Dieta = new Dieta();
+            //Recomendacion = new Recomendacion();
+        }
     }
 }

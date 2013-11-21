@@ -54,38 +54,41 @@ namespace MyGym.Service.Models
                 {
                     return APIFunctions.ErrorResult(string.Format(JsonMessage.NotFound, "Usuario"));
                 }
-                if (user.PhysicalComplexion != olduser.ComplexionFisica) olduser.ComplexionFisica = user.PhysicalComplexion;
-                if (user.LastName != null & user.LastName != string.Empty) olduser.Materno = user.LastName;
-                if (user.Names != null & user.Names != string.Empty) olduser.Nombre = user.Names;
-                if (user.Password != null & user.Password != string.Empty) olduser.Password = user.Password;
-                if (user.FirstName != null & user.FirstName != string.Empty) olduser.Paterno = user.FirstName;
-                if (user.Sex != olduser.Sexo) olduser.Sexo = user.Sex;
+                MyGymContext.DB.Entry<Usuario>(olduser).CurrentValues.SetValues(APIFunctions.UserToUsuario(user));
+                //MyGymContext.DB.Entry<Usuario>(olduser).State = System.Data.EntityState.Modified;
 
-                if (user.Nick != null & user.Nick != string.Empty)
-                {
-                    Usuario finduser = MyGymContext.DB.Usuario.FirstOrDefault(item => item.Nick == user.Nick & item.UsuarioID != olduser.UsuarioID);
-                    if (finduser != null)
-                    {
-                        return APIFunctions.ErrorResult(string.Format(JsonMessage.Error, "Nick"));
-                    }
-                    olduser.Nick = user.Nick;
-                }
-                if (user.Email != null & user.Email != string.Empty)
-                {
-                    Usuario finduser = MyGymContext.DB.Usuario.FirstOrDefault(item => item.Email == user.Email & item.UsuarioID != olduser.UsuarioID);
-                    if (finduser != null)
-                    {
-                        return APIFunctions.ErrorResult(string.Format(JsonMessage.Error, "Email"));
-                    }
-                    olduser.Email = user.Email;
-                }
+                //if (user.PhysicalComplexion != olduser.ComplexionFisica) olduser.ComplexionFisica = user.PhysicalComplexion;
+                //if (user.LastName != null & !user.LastName.Equals(string.Empty)) olduser.Materno = user.LastName;
+                //if (user.Names != null & !user.Names.Equals(string.Empty)) olduser.Nombre = user.Names;
+                //if (user.Password != null & user.Password != string.Empty) olduser.Password = user.Password;
+                //if (user.FirstName != null & user.FirstName != string.Empty) olduser.Paterno = user.FirstName;
+                //if (user.Sex != olduser.Sexo) olduser.Sexo = user.Sex;
+
+                //if (user.Nick != null & user.Nick != string.Empty)
+                //{
+                //    Usuario finduser = MyGymContext.DB.Usuario.FirstOrDefault(item => item.Nick == user.Nick & item.UsuarioID != olduser.UsuarioID);
+                //    if (finduser != null)
+                //    {
+                //        return APIFunctions.ErrorResult(string.Format(JsonMessage.Error, "Nick"));
+                //    }
+                //    olduser.Nick = user.Nick;
+                //}
+                //if (user.Email != null & user.Email != string.Empty)
+                //{
+                //    Usuario finduser = MyGymContext.DB.Usuario.FirstOrDefault(item => item.Email == user.Email & item.UsuarioID != olduser.UsuarioID);
+                //    if (finduser != null)
+                //    {
+                //        return APIFunctions.ErrorResult(string.Format(JsonMessage.Error, "Email"));
+                //    }
+                //    olduser.Email = user.Email;
+                //}
 
                 //DateTime olddateofbirth = olduser.FechaNacimiento;
                 //double oldweigth = olduser.Peso;
                 //double oldheight = olduser.Estatura;
 
                 //if (user.DateOfBirth != null | user.Weight != default(double) | user.Height != default(double))
-                //{ 
+                //{
                 //    if (user.DateOfBirth != null) olduser.FechaNacimiento = user.DateOfBirth;
                 //    if (user.Weight != default(double)) olduser.Peso = user.Weight;
                 //    if (user.Height != default(double)) olduser.Estatura = user.Height;

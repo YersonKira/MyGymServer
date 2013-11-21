@@ -3,16 +3,7 @@
     ViewBag.Title = "Register";
     Layout = "~/Views/MainLayout.cshtml";
 }
-<script type="text/javascript">
-    function Send() {
-        var json = $("#registerform").serializeObject();
-        $.post('/Usuario/Register', { userdata: JSON.stringify(json) }, function (response) {
-            window.location.href = response.Url;
-        });
-    }
-</script>
-<h1>Formulario de Registro
-</h1>
+<h1>Formulario de Registro</h1>
 <form id="registerform" action="/Usuario/Register" method="post">
     <div class="panel panel-info">
         <div class="panel-heading">
@@ -22,19 +13,19 @@
             <table>
                 <tr>
                     <td><label>Nombres</label></td>
-                    <td><input type="text" name="Names" placeholder="Juan Carlos" class="form-control" /></td>
+                    <td><input type="text" name="userdata.Names" placeholder="Juan Carlos" class="form-control" /></td>
                 </tr>
                 <tr>
                     <td><label>Apellido Paterno</label></td>
-                    <td><input type="text" name="FirstName" placeholder="Cortez" class="form-control" /></td>
+                    <td><input type="text" name="userdata.FirstName" placeholder="Cortez" class="form-control" /></td>
                 </tr>
                 <tr>
                     <td><label>Apellido Materno</label></td>
-                    <td><input type="text" name="LastName" placeholder="Fernandez" class="form-control" /></td>
+                    <td><input type="text" name="userdata.LastName" placeholder="Fernandez" class="form-control" /></td>
                 </tr>
                 <tr>
                     <td><label>Fecha de Nacimiento</label></td>
-                    <td><input type="date" name="DateOfBirth" class="form-control" /></td>
+                    <td><input type="date" name="userdata.DateOfBirth" class="form-control" /></td>
                 </tr>
             </table>
         </div>
@@ -47,15 +38,15 @@
             <table>
                 <tr>
                     <td><label>Email</label></td>
-                    <td><input type="email" name="Email" class="form-control" /></td>
+                    <td><input type="email" name="userdata.Email" class="form-control" /></td>
                 </tr>
                 <tr>
                     <td><label>Nick : </label></td>
-                    <td><input type="text" name="Nick" placeholder="Juan" class="form-control" /></td>
+                    <td><input type="text" name="userdata.Nick" placeholder="Juan" class="form-control" /></td>
                 </tr>
                 <tr>
                     <td><label>Contraseña : </label></td>
-                    <td><input type="password" name="Password" class="form-control" /></td>
+                    <td><input type="password" name="userdata.Password" class="form-control" /></td>
                 </tr>
             </table>
         </div>
@@ -70,7 +61,7 @@
                     <td><label>Peso</label></td>
                     <td>
                         <div class="input-group">
-                            <input type="text" name="Weight" placeholder="69" class="form-control" />
+                            <input type="text" name="userdata.Weight" placeholder="69" class="form-control" />
                             <span class="input-group-addon">grs</span>
                         </div>
                     </td>
@@ -79,7 +70,7 @@
                     <td><label>Altura</label></td>
                     <td>
                         <div class="input-group">
-                            <input type="text" name="Heigth" placeholder="1.70" class="form-control" />
+                            <input type="text" name="userdata.Heigth" placeholder="1.70" class="form-control" />
                             <span class="input-group-addon">mts</span>
                         </div>
                     </td>
@@ -87,7 +78,7 @@
                 <tr>
                     <td><label>Sexo</label></td>
                     <td>
-                        <select name="Sex">
+                        <select name="userdata.Sex">
                             <option value="Femenino">@Sexo.Femenino</option>
                             <option value="Masculino">@Sexo.Masculino</option>
                         </select>
@@ -117,7 +108,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="button" value="Enviar" class="btn btn-default" onclick="Send()" />
+                        <input type="submit" value="Enviar" class="btn btn-default" />
                     </td>
                 </tr>
             </table>

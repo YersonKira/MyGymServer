@@ -29,6 +29,7 @@ namespace MyGym.Data.Entities
         public Alimento()
         {
             SeConforma = new HashSet<SeConforma>();
+            //Grupo = new Grupo();
         }
     }
 }

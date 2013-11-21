@@ -88,7 +88,7 @@ namespace MyGym.Service.Models
         public object GetUserRecomendation(int recomendationid)
         {
             Recomendacion recomendation = Get(recomendationid);
-            if (recomendationid == null)
+            if (recomendation == null)
             {
                 return APIFunctions.ErrorResult(JsonMessage.NotFound);
             }

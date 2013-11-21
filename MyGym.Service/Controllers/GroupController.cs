@@ -23,16 +23,14 @@ namespace MyGym.Service.Controllers
             return View();
         }
         [HttpPost]
-        public JsonResult Create(string groupdata)
+        public ActionResult Create(Grupo groupdata)
         {
-            Grupo group = JsonConvert.DeserializeObject<Grupo>(groupdata);
-            string redirect = new UrlHelper(Request.RequestContext).Action("Index");
-            int result = new GroupRepository().Add(group);
+            int result = new GroupRepository().Add(groupdata);
             if (result == 0)
             {
-                redirect = new UrlHelper(Request.RequestContext).Action("Create");
+                return RedirectToAction("Create");
             }
-            return Json(new { Url = redirect });
+            return RedirectToAction("Index");
         }
         [HttpGet]
         public ActionResult Delete(int groupid)
@@ -47,12 +45,10 @@ namespace MyGym.Service.Controllers
             return View(result);
         }
         [HttpPost]
-        public JsonResult Edit(int groupid, string groupdata)
+        public ActionResult Edit(int groupid, Grupo groupdata)
         {
-            Grupo group = JsonConvert.DeserializeObject<Grupo>(groupdata);
-            new GroupRepository().Update(groupid, group);
-            string redirect = new UrlHelper(Request.RequestContext).Action("Index");
-            return Json(new { Url = redirect });
+            new GroupRepository().Update(groupid, groupdata);
+            return RedirectToAction("Index");
         }
     }
 }

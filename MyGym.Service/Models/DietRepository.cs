@@ -4,6 +4,7 @@ using MyGym.Data;
 using MyGym.Data.Entities;
 using MyGym.Service.Controllers.API.ErrorHandler;
 using MyGym.Service.Models.APIHelper;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,13 +44,14 @@ namespace MyGym.Service.Models
                 List<UserDiet> result = new List<UserDiet>();
                 foreach (var item in recomendations)
                 {
-                    UserDiet userdiet = new UserDiet() {
+                    UserDiet userdiet = new UserDiet()
+                    {
                         DietID = diet.DietaID,
                         ImageURL = item.Recomendacion.ImageUrl,
                         Name = item.Recomendacion.Nombre,
                         RecomendationID = item.RecomendacionID
                     };
-                    userdiet.MealTime = item.Recomendacion.SeRecomiendaEn.Select(tc => tc.TiempoDeComida.Nombre.ToString());
+                    //userdiet.MealTime = item.Recomendacion.SeRecomiendaEn.Select(tc => tc.TiempoDeComida.Nombre.ToString());
                     result.Add(userdiet);
                 }
                 return APIFunctions.SuccessResult(result, JsonMessage.Success);
@@ -65,9 +67,11 @@ namespace MyGym.Service.Models
                 DateTime olddateofbirth = user.FechaNacimiento;
                 double oldweigth = user.Peso;
                 double oldheight = user.Estatura;
-                if (userdata.DateOfBirth != null) user.FechaNacimiento = userdata.DateOfBirth;
-                if (userdata.Weight != default(double)) user.Peso = userdata.Weight;
-                if (userdata.Height != default(double)) user.Estatura = userdata.Height;
+                MyGymContext.DB.Entry<Usuario>(user).CurrentValues.SetValues(APIFunctions.UserToUsuario(userdata));
+                MyGymContext.DB.Entry<Usuario>(user).State = System.Data.EntityState.Modified;
+                //if (userdata.DateOfBirth != null) user.FechaNacimiento = userdata.DateOfBirth;
+                //if (userdata.Weight != default(double)) user.Peso = userdata.Weight;
+                //if (userdata.Height != default(double)) user.Estatura = userdata.Height;
                 MyGymContext.DB.SaveChanges();
                 if (user.FechaNacimiento != olddateofbirth | user.Peso != oldweigth | user.Estatura != oldheight)
                 {

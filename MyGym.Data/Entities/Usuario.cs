@@ -26,6 +26,7 @@ namespace MyGym.Data.Entities
         public double Peso { get; set; } // En Kilogramos
         public double Estatura { get; set; } // En metros
         public ComplexionFisica ComplexionFisica { get; set; }
+        [Column(TypeName = "datetime2")]
         public DateTime FechaNacimiento { get; set; }
 
         // Posible cambio

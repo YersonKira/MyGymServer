@@ -13,7 +13,7 @@ namespace MyGym.Service.Controllers.API.ErrorHandler
             filterContext.ExceptionHandled = true;
             filterContext.Result = new JsonResult()
             {
-                Data = new { success = false, message = filterContext.Exception.Message },
+                Data = new { success = false, message = filterContext.Exception.InnerException },
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }

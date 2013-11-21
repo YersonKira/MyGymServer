@@ -29,5 +29,10 @@ namespace MyGym.Data.Entities
         public int UsuarioID { get; set; }
         [ForeignKey("UsuarioID")]
         public virtual Usuario Usuario { get; set; }
+
+        public Historial()
+        {
+            //Usuario = new Usuario();
+        }
     }
 }

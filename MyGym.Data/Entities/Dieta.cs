@@ -34,6 +34,7 @@ namespace MyGym.Data.Entities
 
         public Dieta()
         {
+            //Usuario = new Usuario();
             Tiene = new HashSet<Tiene>();
         }
     }

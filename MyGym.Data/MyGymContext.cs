@@ -44,7 +44,11 @@ namespace MyGym.Data
         public MyGymContext()
             : base("MyGymDB")
         {
-           
+            //Database.SetInitializer<MyGymContext>(new MyGymInitializer());
+        }
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
         }
     }
     public class MyGymInitializer : DropCreateDatabaseAlways<MyGymContext>
@@ -85,7 +89,7 @@ namespace MyGym.Data
             context.SaveChanges();
             #endregion
             #region Usuario
-            context.Usuario.Add(new Usuario()
+            var user = context.Usuario.Add(new Usuario()
             {
                 ComplexionFisica = ComplexionFisica.Mediana,
                 Email = "Juan@hotmail.com",
@@ -102,7 +106,8 @@ namespace MyGym.Data
             context.SaveChanges();
             #endregion
             #region Grupos
-            context.Grupo.Add(new Grupo() { 
+            context.Grupo.Add(new Grupo()
+            {
                 Nombre = "Cereales",
                 RecomendacionMaxima = 10,
                 RecomendacionMinima = 5
@@ -128,13 +133,14 @@ namespace MyGym.Data
             context.SaveChanges();
             #endregion
             #region Alimentos
-            context.Alimento.Add(new Alimento() { 
+            context.Alimento.Add(new Alimento()
+            {
                 Nombre = "Arroz",
                 Calorias = 362,
                 Grasas = 0.6,
                 GrupoID = 1,
                 HidratosDeCarbono = 87.6,
-                Proteinas = 7                
+                Proteinas = 7
             });
             context.Alimento.Add(new Alimento()
             {
@@ -173,7 +179,8 @@ namespace MyGym.Data
                 Preparacion = "Calentar la leche en una olla con la cáscara de limón, la canela en rama y el azúcar.\nCuando empiece a hervir, añadiremos el arroz y lo dejaremos cocer durante 20 minutos aproximadamente.\nPasados los 20 minutos retiraremos la cáscara del limón y la canela en rama y ya podremos servir el postre en fuentes individuales.\nEste postre se puede servir tanto en frío como en caliente."
             });
             context.SaveChanges();
-            context.SeRecomienda.Add(new SeRecomienda() { 
+            context.SeRecomienda.Add(new SeRecomienda()
+            {
                 RecomendacionID = 1,
                 TiempoDeComidaID = 1
             });
@@ -183,8 +190,8 @@ namespace MyGym.Data
                 TiempoDeComidaID = 2
             });
             context.SaveChanges();
-            context.SeConforma.Add(new SeConforma() 
-            { 
+            context.SeConforma.Add(new SeConforma()
+            {
                 AlimentoID = 1,
                 Cantidad = 220,
                 RecomendacionID = 1
@@ -217,7 +224,7 @@ namespace MyGym.Data
                 Calorias = 300,
                 Grasas = 100,
                 Proteinas = 200,
-                HidratosCarbono = 200,
+                HidratosCarbono = 200
             });
             context.Dieta.Add(new Dieta()
             {
@@ -226,7 +233,7 @@ namespace MyGym.Data
                 Calorias = 300,
                 Grasas = 100,
                 Proteinas = 200,
-                HidratosCarbono = 200,
+                HidratosCarbono = 200
             });
             context.Dieta.Add(new Dieta()
             {
@@ -235,7 +242,7 @@ namespace MyGym.Data
                 Calorias = 300,
                 Grasas = 100,
                 Proteinas = 200,
-                HidratosCarbono = 200,
+                HidratosCarbono = 200
             });
             context.Dieta.Add(new Dieta()
             {
@@ -244,7 +251,7 @@ namespace MyGym.Data
                 Calorias = 300,
                 Grasas = 100,
                 Proteinas = 200,
-                HidratosCarbono = 200,
+                HidratosCarbono = 200
             });
             context.Dieta.Add(new Dieta()
             {
@@ -253,7 +260,7 @@ namespace MyGym.Data
                 Calorias = 300,
                 Grasas = 100,
                 Proteinas = 200,
-                HidratosCarbono = 200,
+                HidratosCarbono = 200
             });
             context.Dieta.Add(new Dieta()
             {
@@ -262,7 +269,7 @@ namespace MyGym.Data
                 Calorias = 300,
                 Grasas = 100,
                 Proteinas = 200,
-                HidratosCarbono = 200,
+                HidratosCarbono = 200
             });
             context.Dieta.Add(new Dieta()
             {
@@ -271,11 +278,11 @@ namespace MyGym.Data
                 Calorias = 300,
                 Grasas = 100,
                 Proteinas = 200,
-                HidratosCarbono = 200,
+                HidratosCarbono = 200
             });
             context.SaveChanges();
-            context.Tiene.Add(new Tiene() 
-            { 
+            context.Tiene.Add(new Tiene()
+            {
                 DietaID = 1,
                 RecomendacionID = 1
             });

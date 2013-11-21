@@ -30,4 +30,5 @@ namespace MyGym.Service.Controllers
             return View(apiobject);
         }
     }
+    
 }

@@ -3,7 +3,7 @@ namespace MyGym.Data.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialCreate : DbMigration
+    public partial class Initial : DbMigration
     {
         public override void Up()
         {
@@ -22,7 +22,7 @@ namespace MyGym.Data.Migrations
                         Peso = c.Double(nullable: false),
                         Estatura = c.Double(nullable: false),
                         ComplexionFisica = c.Int(nullable: false),
-                        FechaNacimiento = c.DateTime(nullable: false),
+                        FechaNacimiento = c.DateTime(nullable: false, storeType: "datetime2"),
                         Nivel = c.Int(nullable: false),
                         FactorActividad = c.Single(nullable: false),
                     })
@@ -69,6 +69,7 @@ namespace MyGym.Data.Migrations
                         Grasas = c.Double(nullable: false),
                         HidratosDeCarbono = c.Double(nullable: false),
                         Image = c.Binary(storeType: "image"),
+                        ImageUrl = c.String(),
                     })
                 .PrimaryKey(t => t.RecomendacionID);
             

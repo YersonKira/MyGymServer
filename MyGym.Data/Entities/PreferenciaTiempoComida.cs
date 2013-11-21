@@ -20,5 +20,11 @@ namespace MyGym.Data.Entities
         public virtual TiempoDeComida TiempoDeComida { get; set; }
         [ForeignKey("UsuarioID")]
         public virtual Usuario Usuario { get; set; }
+
+        public PreferenciaTiempoComida()
+        {
+            //TiempoDeComida = new TiempoDeComida();
+            //Usuario = new Usuario();
+        }
     }
 }

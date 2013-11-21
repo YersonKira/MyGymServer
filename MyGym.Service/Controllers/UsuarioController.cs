@@ -15,6 +15,7 @@ namespace MyGym.Service.Controllers
 {
     public class UsuarioController : Controller
     {
+        [Authorize(Users = "root")]
         [HttpGet]
         public ActionResult Index(int userid)
         {
@@ -38,17 +39,15 @@ namespace MyGym.Service.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Register(string userdata)
+        public ActionResult Register(UserInformation userdata)
         {
-            var user = JsonConvert.DeserializeObject<UserInformation>(userdata);
-            var result = (new UserRepository()).Add(user);
+            var result = (new UserRepository()).Add(userdata);
             var usuarioID = APIFunctions.GetData<int>(JsonConvert.SerializeObject(result));
-            string redirecturl = new UrlHelper(Request.RequestContext).Action("Index", new { userid = usuarioID });
             if (usuarioID == default(int))
             {
-                redirecturl = new UrlHelper(Request.RequestContext).Action("Register");
+                return RedirectToAction("Register");
             }
-            return Json(new { Url = redirecturl });   
+            return RedirectToAction("Index", new { userid = usuarioID });  
         }
         [HttpGet]
         public ActionResult Edit(int userid)
