@@ -55,7 +55,7 @@ namespace MyGym.Service.Models
                     return APIFunctions.ErrorResult(string.Format(JsonMessage.NotFound, "Usuario"));
                 }
                 MyGymContext.DB.Entry<Usuario>(olduser).CurrentValues.SetValues(APIFunctions.UserToUsuario(user));
-                //MyGymContext.DB.Entry<Usuario>(olduser).State = System.Data.EntityState.Modified;
+                MyGymContext.DB.Entry<Usuario>(olduser).State = System.Data.EntityState.Modified;
 
                 //if (user.PhysicalComplexion != olduser.ComplexionFisica) olduser.ComplexionFisica = user.PhysicalComplexion;
                 //if (user.LastName != null & !user.LastName.Equals(string.Empty)) olduser.Materno = user.LastName;

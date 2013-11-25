@@ -15,7 +15,6 @@ namespace MyGym.Service.Controllers
 {
     public class UsuarioController : Controller
     {
-        [Authorize(Users = "root")]
         [HttpGet]
         public ActionResult Index(int userid)
         {

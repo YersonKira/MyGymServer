@@ -26,7 +26,6 @@ namespace MyGym.Data.Entities
         public double Peso { get; set; } // En Kilogramos
         public double Estatura { get; set; } // En metros
         public ComplexionFisica ComplexionFisica { get; set; }
-        [Column(TypeName = "datetime2")]
         public DateTime FechaNacimiento { get; set; }
 
         // Posible cambio
@@ -34,15 +33,13 @@ namespace MyGym.Data.Entities
         public float FactorActividad { get; set; }
         //
 
-        public virtual ICollection<Dieta> Dieta { get; set; }
-        public virtual ICollection<Historial> Historial { get; set; }
+        public virtual IEnumerable<Dieta> Dieta { get; set; }
+        public virtual IEnumerable<Historial> Historial { get; set; }
         // Posible cambio
-        public virtual ICollection<PreferenciaTiempoComida> TiemposDeComida { get; set; }
+        public virtual IEnumerable<PreferenciaTiempoComida> TiemposDeComida { get; set; }
         public Usuario()
         {
-            Dieta = new HashSet<Dieta>();
-            Historial = new HashSet<Historial>();
-            TiemposDeComida = new HashSet<PreferenciaTiempoComida>();
+            
         }
     }
 }
