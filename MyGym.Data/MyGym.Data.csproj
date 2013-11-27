@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Entities\Actividad.cs" />
     <Compile Include="Entities\Alimento.cs" />
+    <Compile Include="Entities\Consumo.cs" />
     <Compile Include="Entities\Dieta.cs" />
     <Compile Include="Entities\Ejercicio.cs" />
     <Compile Include="Entities\Grupo.cs" />

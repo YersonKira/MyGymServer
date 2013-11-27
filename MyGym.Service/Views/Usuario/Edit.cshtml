@@ -4,16 +4,7 @@
     ViewBag.Title = "Edit";
     Layout = "~/Views/MainLayout.cshtml";
 }
-<script src="~/Public/jquery.js"></script>
-<script type="text/javascript">
-    function Save() {
-        var json = $("#registerform").serializeObject();
-        $.post('/Usuario/Update?userid=@Model.UserID', { userdata: JSON.stringify(json) }, function (res) {
-            window.location.href = res.Url;
-        });
-    }
-</script>
-<form id="registerform" action="/Usuario/Update?userid=@Model.UserID" method="post">
+<form id="registerform" action="/Usuario/Edit?userid=@Model.UserID" method="post">
     <div class="panel panel-info">
         <div class="panel-heading">
             Informacion Personal
@@ -22,19 +13,21 @@
             <table>
                 <tr>
                     <td><label>Nombres</label></td>
-                    <td><input type="text" name="Names" value="@Model.Names" placeholder="Juan Carlos" class="form-control" /></td>
+                    <td><input type="text" name="userdata.Names" value="@Model.Names" placeholder="Juan Carlos" class="form-control" /></td>
                 </tr>
                 <tr>
                     <td><label>Apellido Paterno</label></td>
-                    <td><input type="text" name="FirstName" value="@Model.FirstName" placeholder="Cortez" class="form-control" /></td>
+                    <td><input type="text" name="userdata.FirstName" value="@Model.FirstName" placeholder="Cortez" class="form-control" /></td>
                 </tr>
                 <tr>
                     <td><label>Apellido Materno</label></td>
-                    <td><input type="text" name="LastName" value="@Model.LastName" placeholder="Fernandez" class="form-control" /></td>
+                    <td><input type="text" name="userdata.LastName" value="@Model.LastName" placeholder="Fernandez" class="form-control" /></td>
                 </tr>
                 <tr>
                     <td><label>Fecha de Nacimiento</label></td>
-                    <td><input type="date" name="DateOfBirth" value="@Model.DateOfBirth.ToShortDateString()" class="form-control" /></td>
+                    <td>
+                        <input type="date" name="DateOfBirth" value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" class="form-control" />
+                    </td>
                 </tr>
             </table>
         </div>
@@ -47,15 +40,15 @@
             <table>
                 <tr>
                     <td><label>Email</label></td>
-                    <td><input type="email" name="Email" value="@Model.Email" class="form-control" /></td>
+                    <td><input type="email" name="userdata.Email" value="@Model.Email" class="form-control" /></td>
                 </tr>
                 <tr>
                     <td><label>Nick : </label></td>
-                    <td><input type="text" name="Nick" value="@Model.Nick" placeholder="Juan" class="form-control" /></td>
+                    <td><input type="text" name="userdata.Nick" value="@Model.Nick" placeholder="Juan" class="form-control" /></td>
                 </tr>
                 <tr>
                     <td><label>Contraseña : </label></td>
-                    <td><input type="password" name="Password" value="@Model.Password" class="form-control" /></td>
+                    <td><input type="password" name="userdata.Password" value="@Model.Password" class="form-control" /></td>
                 </tr>
             </table>
         </div>
@@ -70,7 +63,7 @@
                     <td><label>Peso</label></td>
                     <td>
                         <div class="input-group">
-                            <input type="text" name="Weight" value="@Model.Weight" placeholder="69" class="form-control" />
+                            <input type="text" name="userdata.Weight" value="@Model.Weight" placeholder="69" class="form-control" />
                             <span class="input-group-addon">grs</span>
                         </div>
                     </td>
@@ -79,7 +72,7 @@
                     <td><label>Altura</label></td>
                     <td>
                         <div class="input-group">
-                            <input type="text" name="Heigth" value="@Model.Height" placeholder="1.70" class="form-control" />
+                            <input type="text" name="userdata.Heigth" value="@Model.Height" placeholder="1.70" class="form-control" />
                             <span class="input-group-addon">mts</span>
                         </div>
                     </td>
@@ -87,37 +80,94 @@
                 <tr>
                     <td><label>Sexo</label></td>
                     <td>
-                        <select name="Sex" >
-                            <option value="Femenino">@Sexo.Femenino</option>
-                            <option value="Masculino">@Sexo.Masculino</option>
+                        <select name="userdata.Sex" >
+                            @switch (Model.Sex)
+                            {
+                                case Sexo.Femenino:
+                                    <option value="Femenino" selected="selected">@Sexo.Femenino</option>
+                                    <option value="Masculino">@Sexo.Masculino</option>
+                                    break;
+                                case Sexo.Masculino:
+                                    <option value="Femenino">@Sexo.Femenino</option>
+                                    <option value="Masculino" selected="selected">@Sexo.Masculino</option>
+                                    break;
+                            }
                         </select>
                     </td>
                 </tr>
                 <tr>
                     <td><label>Complexion Fisica</label></td>
                     <td>
-                        <select name="PhysicalComplexion" >
-                            <option value="@ComplexionFisica.Pequena">@ComplexionFisica.Pequena</option>
-                            <option value="@ComplexionFisica.Mediana">@ComplexionFisica.Mediana</option>
-                            <option value="@ComplexionFisica.Grande">@ComplexionFisica.Grande</option>
+                        <select name="userdata.PhysicalComplexion" >
+                            @switch (Model.PhysicalComplexion)
+                            {
+                                case ComplexionFisica.Pequena:
+                                    <option value="@ComplexionFisica.Pequena" selected="selected">Pequeña</option>
+                                    <option value="@ComplexionFisica.Mediana">Mediana</option>
+                                    <option value="@ComplexionFisica.Grande">Grande</option>       
+                                    break;
+                                case ComplexionFisica.Mediana:
+                                    <option value="@ComplexionFisica.Pequena">Pequeña</option>
+                                    <option value="@ComplexionFisica.Mediana" selected="selected">Mediana</option>
+                                    <option value="@ComplexionFisica.Grande">Grande</option>       
+                                    break;
+                                case ComplexionFisica.Grande:
+                                    <option value="@ComplexionFisica.Pequena">Pequeña</option>
+                                    <option value="@ComplexionFisica.Mediana">Mediana</option>
+                                    <option value="@ComplexionFisica.Grande" selected="selected">Grande</option>  
+                                    break;
+                            }
                         </select>
                     </td>
                 </tr>
                 <tr>
                     <td><label>Nivel de Actividad</label></td>
                     <td>
-                        <select name="LevelActivity">
-                            <option value="@Nivel.MuyLeve">Muy Leve</option>
-                            <option value="@Nivel.Leve">Leve</option>
-                            <option value="@Nivel.Moderado">Moderado</option>
-                            <option value="@Nivel.Intenso">Intenso</option>
-                            <option value="@Nivel.Excepcional">Excepcional</option>
+                        <select name="userdata.LevelActivity">
+                            @switch (Model.LevelActivity)
+                            {
+                                case Nivel.MuyLeve:
+                                    <option value="@Nivel.MuyLeve" selected="selected">Muy Leve</option>
+                                    <option value="@Nivel.Leve">Leve</option>
+                                    <option value="@Nivel.Moderado">Moderado</option>
+                                    <option value="@Nivel.Intenso">Intenso</option>
+                                    <option value="@Nivel.Excepcional">Excepcional</option>
+                                    break;
+                                case Nivel.Leve:
+                                    <option value="@Nivel.MuyLeve">Muy Leve</option>
+                                    <option value="@Nivel.Leve" selected="selected">Leve</option>
+                                    <option value="@Nivel.Moderado">Moderado</option>
+                                    <option value="@Nivel.Intenso">Intenso</option>
+                                    <option value="@Nivel.Excepcional">Excepcional</option>
+                                    break;
+                                case Nivel.Moderado:
+                                    <option value="@Nivel.MuyLeve">Muy Leve</option>
+                                    <option value="@Nivel.Leve">Leve</option>
+                                    <option value="@Nivel.Moderado" selected="selected">Moderado</option>
+                                    <option value="@Nivel.Intenso">Intenso</option>
+                                    <option value="@Nivel.Excepcional">Excepcional</option>
+                                    break;
+                                case Nivel.Intenso:
+                                    <option value="@Nivel.MuyLeve">Muy Leve</option>
+                                    <option value="@Nivel.Leve">Leve</option>
+                                    <option value="@Nivel.Moderado">Moderado</option>
+                                    <option value="@Nivel.Intenso" selected="selected">Intenso</option>
+                                    <option value="@Nivel.Excepcional">Excepcional</option>
+                                    break;
+                                case Nivel.Excepcional:
+                                    <option value="@Nivel.MuyLeve">Muy Leve</option>
+                                    <option value="@Nivel.Leve">Leve</option>
+                                    <option value="@Nivel.Moderado">Moderado</option>
+                                    <option value="@Nivel.Intenso">Intenso</option>
+                                    <option value="@Nivel.Excepcional" selected="selected">Excepcional</option>
+                                    break;
+                            }
                         </select>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <input type="button" value="Salvar" class="btn btn-default" onclick="Save()" />
+                        <input type="submit" value="Salvar" class="btn btn-default"  />
                     </td>
                 </tr>
             </table>

@@ -36,7 +36,8 @@ namespace MyGym.Service.Controllers.API
         [APIErrorHandler]
         public JsonResult Update(string userdata)
         {
-            var result = (new UserRepository()).Update(JsonConvert.DeserializeObject<UserInformation>(userdata));
+            var user = JsonConvert.DeserializeObject<UserInformation>(userdata);
+            var result = (new UserRepository()).Update(user.UserID, user);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         [HttpGet]

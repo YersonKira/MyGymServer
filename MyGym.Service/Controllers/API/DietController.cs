@@ -55,5 +55,12 @@ namespace MyGym.Service.Controllers.API
             var result = new RecomendationRepository().GetUserRecomendation(recomendationid);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        [HttpGet]
+        [APIErrorHandler]
+        public JsonResult ConsumeRecomendation(int userid, int recomendationid, string date, string mealtime)
+        {
+            var result = new DietRepository().ConsumeRecomendation(userid, recomendationid, date, mealtime);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

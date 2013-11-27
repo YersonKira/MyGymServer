@@ -5,6 +5,7 @@
 }
 <a href="/Food/Create">Nuevo Alimento</a>
 <h1>Alimentos</h1>
+<section>Cantidad : @Model.Count()</section>
 <ul class="list-group">
     @foreach (var item in Model)
     {
@@ -15,7 +16,10 @@
             <span class="badge">
                 <a href="/Food/Edit?foodid=@item.AlimentoID" style="color:white;">Editar</a>
             </span>
-            <label>@item.Nombre</label>
+            <div>
+                <label style="font-size:large">@item.Nombre</label><br />
+                <label style="font-size:small">@item.Grupo.Nombre</label>
+            </div>
             @*<a href="/Group/Get?groupid=@item.GrupoID" >@item.Nombre</a>*@
         </li>
     }

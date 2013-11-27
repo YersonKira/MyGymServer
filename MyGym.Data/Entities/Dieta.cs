@@ -14,9 +14,9 @@ namespace MyGym.Data.Entities
     public class Dieta
     {
         [Key]
-        public int DietaID { get; set; }
+        public int DietaID { get; set; } 
         public Dia Dia { get; set; }
-        public double Calorias { get; set; }
+        public double Calorias { get; set; } // Kilocalorias
         public double Proteinas { get; set; }
         public double Grasas { get; set; }
         public double HidratosCarbono { get; set; }

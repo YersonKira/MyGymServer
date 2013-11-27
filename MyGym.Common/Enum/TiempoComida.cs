@@ -8,6 +8,6 @@ namespace MyGym.Common.Enum
 {
     public enum TiempoComida
     {
-        Desayuno, Almuerzo, Merienda, Cena
+        Desayuno, Media_Manana, Almuerzo, Media_Tarde, Cena
     }
 }

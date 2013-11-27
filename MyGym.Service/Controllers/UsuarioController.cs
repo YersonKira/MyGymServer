@@ -38,8 +38,9 @@ namespace MyGym.Service.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Register(UserInformation userdata)
+        public ActionResult Register(UserInformation userdata, string DateOfBirth)
         {
+            userdata.DateOfBirth = DateTime.Parse(DateOfBirth);
             var result = (new UserRepository()).Add(userdata);
             var usuarioID = APIFunctions.GetData<int>(JsonConvert.SerializeObject(result));
             if (usuarioID == default(int))
@@ -56,18 +57,16 @@ namespace MyGym.Service.Controllers
             return View(user);
         }
         [HttpPost]
-        public ActionResult Update(int userid, string userdata)
+        public ActionResult Edit(int userid, UserInformation userdata, string DateOfBirth)
         {
-            var user = JsonConvert.DeserializeObject<UserInformation>(userdata);
-            user.UserID = userid;
-            var result = new UserRepository().Update(user);
+            userdata.DateOfBirth = DateTime.Parse(DateOfBirth);
+            var result = new UserRepository().Update(userid, userdata);
             var data = APIFunctions.GetData<int>(JsonConvert.SerializeObject(result));
-            string redirecturl = new UrlHelper(Request.RequestContext).Action("Index", new { userid = data });
             if (data == default(int))
             {
-                redirecturl = new UrlHelper(Request.RequestContext).Action("Edit", new { userid = userid });
+                return Json("Error", JsonRequestBehavior.AllowGet);
             }
-            return Json(new { Url = redirecturl });
+            return RedirectToAction("Index", new { userid = userid });
         }
     }
 }

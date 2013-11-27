@@ -54,6 +54,7 @@
     <Compile Include="UserRecomendation.cs" />
     <Compile Include="UserRecord.cs" />
     <Compile Include="UserInformation.cs" />
+    <Compile Include="UserReport.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

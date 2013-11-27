@@ -26,7 +26,8 @@ namespace MyGym.Service.Models.APIHelper
                 PhysicalComplexion = usuario.ComplexionFisica,
                 Sex = usuario.Sexo,
                 UserID = usuario.UsuarioID,
-                Weight = usuario.Peso
+                Weight = usuario.Peso,
+                LevelActivity = usuario.Nivel
             };
         }
         public static Usuario UserToUsuario(UserInformation user)

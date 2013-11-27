@@ -23,7 +23,7 @@ namespace MyGym.Service
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             // Initialize Database
-            //Database.SetInitializer<MyGymContext>(new MyGymInitializer());
+            Database.SetInitializer<MyGymContext>(new MyGymInitializer());
         }
     }
 }

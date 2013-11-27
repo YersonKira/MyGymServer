@@ -25,9 +25,23 @@ namespace MyGym.Service.Models
                 {
                     return APIFunctions.ErrorResult(JsonMessage.NotFound);
                 }
-                Usuario newuser = MyGymContext.DB.Usuario.Add(APIFunctions.UserToUsuario(user));
+                Usuario usuario = APIFunctions.UserToUsuario(user);
+                Usuario newuser = MyGymContext.DB.Usuario.Add(usuario);
                 MyGymContext.DB.SaveChanges();
-                // Generamos la dieta
+                // Inicializar dietas
+                foreach (var item in DietRepository.dias)
+                {
+                    MyGymContext.DB.Dieta.Add(new Dieta() { 
+                        UsuarioID = usuario.UsuarioID,
+                        Dia = item,
+                        Grasas = 0,
+                        Calorias = 0,
+                        HidratosCarbono = 0,
+                        Proteinas = 0
+                    });
+                    MyGymContext.DB.SaveChanges();
+                }
+                new DietRepository().CreateDiet(usuario.UsuarioID);
                 //new DietRepository().CreateDiet(newuser.UsuarioID);
                 return APIFunctions.SuccessResult(newuser.UsuarioID, JsonMessage.Success);
             }
@@ -45,11 +59,11 @@ namespace MyGym.Service.Models
             }
             return APIFunctions.SuccessResult(APIFunctions.UsuarioToUser(user), JsonMessage.Success);
         }
-        public object Update(UserInformation user)
+        public object Update(int userid, UserInformation user)
         {
             try
             {
-                Usuario olduser = MyGymContext.DB.Usuario.Find(user.UserID);
+                Usuario olduser = MyGymContext.DB.Usuario.Find(userid);
                 if (olduser == null)
                 {
                     return APIFunctions.ErrorResult(string.Format(JsonMessage.NotFound, "Usuario"));
@@ -98,7 +112,7 @@ namespace MyGym.Service.Models
                 //{
                 //    new DietRepository().CreateDiet(olduser.UsuarioID);
                 //}
-                return APIFunctions.SuccessResult(new { userid = olduser.UsuarioID }, JsonMessage.Success);
+                return APIFunctions.SuccessResult(olduser.UsuarioID, JsonMessage.Success);
             }
             catch (Exception ex)
             {

@@ -12,10 +12,11 @@ namespace MyGym.Service.Controllers.API
     {
         [HttpGet]
         [APIErrorHandler]
-        public JsonResult Get(int userid, string filter = "month", int weeks = 0)
+        public JsonResult Get(int userid)
         {
-            var result = new ReportRepository().GetUserRecord(userid, filter, weeks);
+            var result = new ReportRepository().GetUserRecord(userid);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        
     }
 }
