@@ -26,12 +26,12 @@ namespace MyGym.Service.Models
             rutina.UsuarioID = user.UsuarioID;
             MyGymContext.DB.Rutina.Add(rutina);
             MyGymContext.DB.SaveChanges();
-            DateTime date = new DateTime();
-            date = System.DateTime.Now;
-            List<Actividad> activities = GetSorted(mode).ToList();
+            ExerciseRepository methods = new ExerciseRepository();
             if (mode)
             {
-                for (int i = 0; i < 12; i++)
+                List<Actividad> activities = new List<Actividad>();
+                List<int> serie = Serie(2, 3, 3).ToList();
+                for (int i = 0; i < serie.Count; i++)
                 {
                     if (i % 4 == 3)
                         activities.Insert(i, new Actividad() { EjercicioID = 1, Fecha = DateTime.Now.AddDays(i), RutinaID = rutina.RutinaID });
@@ -47,6 +47,7 @@ namespace MyGym.Service.Models
             }
             else
             {
+                List<Actividad> activities = new List<Actividad>();
                 for (int i = 0; i < 21; i++)
                 {
                     if (i % 7 == 5 || i % 7 == 6)
@@ -67,109 +68,21 @@ namespace MyGym.Service.Models
         {
             return activities.Select(p => new { Date = p.Fecha, ExerciseID = p.EjercicioID });
         }
-        private IEnumerable<Actividad> GetSorted(bool sw)
+
+        public IEnumerable<int> Serie(int repeticiones, int limite, int giros)
         {
-            random = new Random();
-            ExerciseRepository repo = new ExerciseRepository();
-            List<List<Ejercicio>> lista = new List<List<Ejercicio>>();
-            List<Ejercicio> cardio = repo.GetByType(TipoEjercicio.Cardio).ToList();
-            List<Ejercicio> gimastics = repo.GetByType(TipoEjercicio.Gimnastics).ToList();
-            List<Ejercicio> weight = repo.GetByType(TipoEjercicio.Weights).ToList();
-            lista.Add(cardio);
-            lista.Add(gimastics);
-            lista.Add(weight);
-            List<Actividad> exercices = new List<Actividad>();
-            if (sw)
+            List<int> resultado = new List<int>();
+            for (int i = 0; i < giros; i++)
             {
-                int j = 0;
-                for (int i = 0; i < 3; i++)
+                for (int j = 0; j < repeticiones; j++)
                 {
-                    exercices.Add(new Actividad()
+                    for (int k = 0; k < limite; k++)
                     {
-                        EjercicioID = lista[j % 3][random.Next(lista[j % 3].Count)].EjercicioID
-                    });
-                    j++;
-                    exercices.Add(new Actividad()
-                    {
-                        EjercicioID = lista[j % 3][random.Next(lista[j % 3].Count)].EjercicioID
-                    });
-                    j++;
-                    exercices.Add(new Actividad()
-                    {
-                        EjercicioID = lista[j % 3][random.Next(lista[j % 3].Count)].EjercicioID
-                    });
-                    j++;
-                    exercices.Add(new Actividad()
-                    {
-                        EjercicioID = lista[j % 3][random.Next(lista[j % 3].Count)].EjercicioID
-                    });
-                    j++;
-                    exercices.Add(new Actividad()
-                    {
-                        EjercicioID = lista[j % 3][random.Next(lista[j % 3].Count)].EjercicioID
-                    });
-                    j++;
-                    exercices.Add(new Actividad()
-                    {
-                        EjercicioID = lista[j % 3][random.Next(lista[j % 3].Count)].EjercicioID
-                    });
-                    j += 2;
+                        resultado.Add(i % limite);
+                    }
                 }
-                return exercices;
             }
-            else
-            {
-                int j = 0;
-                for (int i = 0; i < 3; i++)
-                {
-                    exercices.Add(new Actividad()
-                    {
-                        EjercicioID = lista[j % 3][random.Next(lista[j % 3].Count)].EjercicioID
-                    });
-                    j++;
-                    exercices.Add(new Actividad()
-                    {
-                        EjercicioID = lista[j % 3][random.Next(lista[j % 3].Count)].EjercicioID
-                    });
-                    j++;
-                    exercices.Add(new Actividad()
-                    {
-                        EjercicioID = lista[j % 3][random.Next(lista[j % 3].Count)].EjercicioID
-                    });
-                    j++;
-                    exercices.Add(new Actividad()
-                    {
-                        EjercicioID = lista[j % 3][random.Next(lista[j % 3].Count)].EjercicioID
-                    });
-                    j++;
-                    exercices.Add(new Actividad()
-                    {
-                        EjercicioID = lista[j % 3][random.Next(lista[j % 3].Count)].EjercicioID
-                    });
-                    j++;
-                    exercices.Add(new Actividad()
-                    {
-                        EjercicioID = lista[j % 3][random.Next(lista[j % 3].Count)].EjercicioID
-                    });
-                    exercices.Add(new Actividad()
-                    {
-                        EjercicioID = lista[j % 3][random.Next(lista[j % 3].Count)].EjercicioID
-                    });
-                    j++;
-                    exercices.Add(new Actividad()
-                    {
-                        EjercicioID = lista[j % 3][random.Next(lista[j % 3].Count)].EjercicioID
-                    });
-                    j++;
-                    exercices.Add(new Actividad()
-                    {
-                        EjercicioID = lista[j % 3][random.Next(lista[j % 3].Count)].EjercicioID
-                    });
-                    j++;
-                    j += 2;
-                }
-                return exercices;
-            }
+            return resultado;
         }
     }
 }
