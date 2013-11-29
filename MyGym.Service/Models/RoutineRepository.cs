@@ -22,43 +22,50 @@ namespace MyGym.Service.Models
             {
                 return APIFunctions.ErrorResult(string.Format(JsonMessage.NotFound, "Usuario"));
             }
+            var query = from x in MyGymContext.DB.Rutina.ToList() where x.UsuarioID == user.UsuarioID select x;
+            foreach (var item in query.ToList())
+            {
+                var exercises = from x in MyGymContext.DB.Actividad.ToList() where x.RutinaID == item.RutinaID orderby x.Fecha select x;
+                if (exercises.ToList().Last().Fecha > System.DateTime.Now)
+                {
+                    return APIFunctions.ErrorResult(string.Format(JsonMessage.Error, "Rutina ya creada"));
+                }
+            }
             Rutina rutina = new Rutina();
             rutina.UsuarioID = user.UsuarioID;
             MyGymContext.DB.Rutina.Add(rutina);
             MyGymContext.DB.SaveChanges();
+            List<Actividad> activities = new List<Actividad>();
             ExerciseRepository methods = new ExerciseRepository();
             if (mode)
             {
-                List<Actividad> activities = new List<Actividad>();
-                List<int> serie = Serie(2, 3, 3).ToList();
+                List<int> serie = Serie(2, 3, 3);
                 for (int i = 0; i < serie.Count; i++)
                 {
                     if (i % 4 == 3)
-                        activities.Insert(i, new Actividad() { EjercicioID = 1, Fecha = DateTime.Now.AddDays(i), RutinaID = rutina.RutinaID });
+                        activities.Insert(i, new Actividad() { EjercicioID = -1, Fecha = DateTime.Now.AddDays(i), RutinaID = rutina.RutinaID });
                     else
                     {
-                        activities[i].Fecha = DateTime.Now.AddDays(i);
-                        activities[i].RutinaID = rutina.RutinaID;
+                        activities.Insert(i, new Actividad() { EjercicioID = methods.GetRandomExercise(serie[i]).EjercicioID, Fecha = DateTime.Now.AddDays(i), RutinaID = rutina.RutinaID });
+                        MyGymContext.DB.Actividad.Add(activities[i]);
+                        MyGymContext.DB.SaveChanges();
                     }
-                    MyGymContext.DB.Actividad.Add(activities[i]);
-                    MyGymContext.DB.SaveChanges();
                 }
                 return APIFunctions.SuccessResult(toSerializable(activities), JsonMessage.Success);
             }
             else
             {
-                List<Actividad> activities = new List<Actividad>();
-                for (int i = 0; i < 21; i++)
+                List<int> serie = Serie(3, 3, 3);
+                for (int i = 0; i < serie.Count; i++)
                 {
                     if (i % 7 == 5 || i % 7 == 6)
-                        activities.Insert(i, new Actividad() { EjercicioID = 1, Fecha = DateTime.Now.AddDays(i), RutinaID = rutina.RutinaID });
+                        activities.Insert(i, new Actividad() { EjercicioID = -1, Fecha = DateTime.Now.AddDays(i), RutinaID = rutina.RutinaID });
                     else
                     {
-                        activities[i].Fecha = DateTime.Now.AddDays(i);
-                        activities[i].RutinaID = rutina.RutinaID;
+                        activities.Insert(i, new Actividad() { EjercicioID = methods.GetRandomExercise(serie[i]).EjercicioID, Fecha = DateTime.Now.AddDays(i), RutinaID = rutina.RutinaID });
+                        MyGymContext.DB.Actividad.Add(activities[i]);
+                        MyGymContext.DB.SaveChanges();
                     }
-                    MyGymContext.DB.Actividad.Add(activities[i]);
-                    MyGymContext.DB.SaveChanges();
                 }
                 return APIFunctions.SuccessResult(toSerializable(activities), JsonMessage.Success);
             }
@@ -66,23 +73,26 @@ namespace MyGym.Service.Models
         }
         private object toSerializable(List<Actividad> activities)
         {
-            return activities.Select(p => new { Date = p.Fecha, ExerciseID = p.EjercicioID });
+            return activities.Select(p => new { Date = p.Fecha, ExerciseID = p.EjercicioID, RoutineID = p.RutinaID });
         }
-
-        public IEnumerable<int> Serie(int repeticiones, int limite, int giros)
+        public object Get(int routineID)
         {
-            List<int> resultado = new List<int>();
-            for (int i = 0; i < giros; i++)
+            var routine = MyGymContext.DB.Rutina.Find(routineID);
+            if (routine == null)
             {
-                for (int j = 0; j < repeticiones; j++)
-                {
-                    for (int k = 0; k < limite; k++)
-                    {
-                        resultado.Add(i % limite);
-                    }
-                }
+                return APIFunctions.ErrorResult(string.Format(JsonMessage.NotFound, "Rutina"));
             }
-            return resultado;
+            var activities = from x in MyGymContext.DB.Actividad.ToList() where x.RutinaID == routine.RutinaID select x;
+            return APIFunctions.SuccessResult(toSerializable(activities.ToList()), JsonMessage.Success);
+        }
+        public List<int> Serie(int repeticiones, int limite, int giros)
+        {
+            List<int> lista = new List<int>();
+            for (int i = 0; i < giros; i++)
+                for (int j = 0; j < repeticiones; j++)
+                    for (int k = 0; k < limite; k++)
+                        lista.Add((k + i) % limite);
+            return lista;
         }
     }
 }

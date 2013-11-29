@@ -44,5 +44,25 @@ namespace MyGym.Service.Models
         {
             return from x in MyGymContext.DB.Ejercicio.ToList() where x.Tipo.Equals(type) select x;
         }
+        Random random = new Random();
+        public Ejercicio GetRandomExercise(int tipo)
+        {
+            if (tipo == 0)
+            {
+                var ejercicios = GetByType(TipoEjercicio.Cardio).ToList();
+                return ejercicios[random.Next(ejercicios.Count)];
+            }
+            if (tipo == 1)
+            {
+                var ejercicios = GetByType(TipoEjercicio.Gimnastics).ToList();
+                return ejercicios[random.Next(ejercicios.Count)];
+            }
+            if (tipo == 2)
+            {
+                var ejercicios = GetByType(TipoEjercicio.Weights).ToList();
+                return ejercicios[random.Next(ejercicios.Count)];
+            }
+            return null;
+        }
     }
 }

@@ -19,7 +19,13 @@ namespace MyGym.Service.Controllers.API
             var result = new RoutineRepository().GenerateRoutine(userID, mode);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-
+        [HttpGet]
+        [APIErrorHandler]
+        public JsonResult GetByID(int routineID)
+        {
+            var result = new RoutineRepository().Get(routineID);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }
 
