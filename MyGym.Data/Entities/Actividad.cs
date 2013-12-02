@@ -16,6 +16,7 @@ namespace MyGym.Data.Entities
         public DateTime Fecha { get; set; }
         public int RutinaID { get; set; }
         public int EjercicioID { get; set; }
+        public bool Completed { get; set; }
         [ForeignKey("RutinaID")]
         public virtual Rutina Rutina { get; set; }
         [ForeignKey("EjercicioID")]
