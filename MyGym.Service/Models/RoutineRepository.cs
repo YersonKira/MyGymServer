@@ -73,7 +73,7 @@ namespace MyGym.Service.Models
         }
         private object toSerializable(List<Actividad> activities)
         {
-            return activities.Select(p => new { Date = p.Fecha, ExerciseID = p.EjercicioID, RoutineID = p.RutinaID });
+            return activities.Select(p => new { Date = p.Fecha, ExerciseID = p.EjercicioID, RoutineID = p.RutinaID, ActivityID = p.ActividadID });
         }
         public object Get(int routineID)
         {
