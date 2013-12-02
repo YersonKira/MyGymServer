@@ -39,7 +39,9 @@ namespace MyGym.Data.Entities
         public virtual IEnumerable<PreferenciaTiempoComida> TiemposDeComida { get; set; }
         public Usuario()
         {
-            
+            Dieta = new HashSet<Dieta>();
+            Historial = new HashSet<Historial>();
+            TiemposDeComida = new HashSet<PreferenciaTiempoComida>();
         }
     }
 }

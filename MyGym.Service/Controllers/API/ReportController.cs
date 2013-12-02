@@ -17,6 +17,12 @@ namespace MyGym.Service.Controllers.API
             var result = new ReportRepository().GetUserRecord(userid);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        
+        [HttpGet]
+        [APIErrorHandler]
+        public JsonResult GetConsumo(int userid, string filter)
+        {
+            var result = new ReportRepository().GetIntake(userid, filter);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

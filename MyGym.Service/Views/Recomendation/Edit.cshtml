@@ -1,0 +1,149 @@
+﻿@model MyGym.Service.Controllers.RecomendationModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/MainLayout.cshtml";
+}
+<script src="~/Public/jquery.js"></script>
+<script src="~/Public/javascript/recomendation.js"></script>
+<h2>Editar Recomendacion</h2>
+<form action="/Recomendation/Edit?recomendationid=@Model.Recomendacion.RecomendacionID" method="post">
+    <table>
+        <tr>
+            <td>Nombre : </td>
+            <td style="width: 500px;">
+                <input type="text" name="recomendation.Nombre" class="form-control" value="@Model.Recomendacion.Nombre" placeholder="BOQUERONES EN VINAGRE" />
+            </td>
+        </tr>
+        <tr>
+            <td>Image URL : </td>
+            <td style="width: 500px;">
+                <input type="text" name="urlimage" class="form-control" value="@Model.Recomendacion.ImageUrl" placeholder="http://domain-name.com/image.jpg" />
+            </td>
+        </tr>
+        <tr>
+            <td>Calorias : </td>
+            <td>
+                <div class="input-group">
+                    <input type="text" name="recomendation.Calorias" class="form-control" value="@Model.Recomendacion.Calorias" placeholder="100,00" />
+                    <span class="input-group-addon">kcal</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>Proteinas : </td>
+            <td>
+                <div class="input-group">
+                    <input type="text" name="recomendation.Proteinas" class="form-control" value="@Model.Recomendacion.Proteinas" placeholder="100,00" />
+                    <span class="input-group-addon">gr</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>Grasas : </td>
+            <td>
+                <div class="input-group">
+                    <input type="text" name="recomendation.Grasas" class="form-control" value="@Model.Recomendacion.Grasas" placeholder="100,00" />
+                    <span class="input-group-addon">gr</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>Hidratos De Carbono : </td>
+            <td>
+                <div class="input-group">
+                    <input type="text" name="recomendation.HidratosDeCarbono" class="form-control" value="@Model.Recomendacion.HidratosDeCarbono" placeholder="100,00" />
+                    <span class="input-group-addon">gr</span>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="input-group">
+                <span class="input-group-btn">Tiempos de Comida: </span>
+                <select id="tiemposcomida" style="margin-left: 10px;" class="form-control">
+                    @foreach (var item in Model.TiemposComida)
+                    {
+                        <option value="@item.TiempoDeComidaID">@item.Nombre</option>
+                    }
+                </select>
+                <span class="input-group-btn">
+                    <button onclick="AddTiempoComida()" class="btn btn-default" type="button">
+                        <img src="~/Public/icons/plus.png" width="20" />
+                    </button>
+                    @*<input type="button" value="Add" onclick="AddTiempoComida()" class="btn btn-default" />*@
+                </span>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div id="contenttiemposcomida">
+                @foreach (var item in Model.Recomendacion.SeRecomiendaEn)
+                {
+                    <div>
+                        <button type="button" class="btn btn-default" onclick="deleteElement(this)">
+                            <img src="~/Public/icons/delete.png" alt="Remove" width="10" />
+                        </button>
+                        <input type="hidden" name="tiemposdecomida" value="@item.TiempoDeComida.TiempoDeComidaID" />
+                        <b>@item.TiempoDeComida.Nombre</b>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <table>
+                <tr>
+                    <td>Grupo: </td>
+                    <td style="width:800px;">
+                        <select id="grupos" onchange="GroupChange()" style="margin-left: 10px;" class="form-control">
+                            @foreach (var item in Model.Grupos)
+                            {
+                                <option value="@item.GrupoID">@item.Nombre</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Alimento: </td>
+                    <td style="width:800px;">
+                        <div class="input-group">
+                            <select id="alimentos" style="margin-left: 10px;" class="form-control"></select>
+                            <span class="input-group-btn">
+                                <button onclick="AddAlimento()" class="btn btn-default" type="button">
+                                    <img src="~/Public/icons/plus.png" width="20" />
+                                </button>
+                                @*<input type="button" value="Add Alimento" onclick="AddAlimento()" class="form-control" />*@
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="panel-body">
+            <div id="contenedoralimentos">
+                @{
+                    var i = 0;
+                    foreach (var item in Model.Recomendacion.SeConforma)
+                    {
+                        <div>
+                            <button type="button" class="btn btn-default" onclick="deleteElement(this)">
+                                <img src="~/Public/icons/delete.png" alt="Remove" width="10" />
+                            </button>
+                            <input type="text" name="alimentos[@i].Cantidad" value="@item.Cantidad" />
+                            <b>@item.Alimento.Nombre</b>
+                            <input type="text" name="alimentos[@i].Descripcion" value="@item.Descipcion" />
+                            <input type="hidden" name="alimentos[@i].AlimentoID" value="@item.AlimentoID" />
+                        </div>
+                        i++;
+                    }
+                }
+            </div>
+            <h4>Preparacion</h4>
+            <textarea name="recomendation.Preparacion"></textarea>
+        </div>
+    </div>
+    <input type="submit" value="Guardar" class="btn btn-default" />
+</form>

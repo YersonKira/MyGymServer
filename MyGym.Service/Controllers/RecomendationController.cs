@@ -26,12 +26,13 @@ namespace MyGym.Service.Controllers
         public ActionResult Create()
         {
             var grupos = new GroupRepository().GetAll();
-            var tiemposcomida = MyGymContext.DB.TiempoDeComida.AsEnumerable();
+            var tiemposcomida = MyGymContext.DB.TiempoDeComida.ToList();
             return View(new RecomendationModel() { TiemposComida = tiemposcomida, Grupos = grupos});
         }
         [HttpPost]
         public ActionResult Create(Recomendacion recomendation, IEnumerable<int> tiemposdecomida, string urlimage, IEnumerable<SeConforma> alimentos)
         {
+            recomendation.ImageUrl = urlimage;
             new RecomendationRepository().Add(recomendation, tiemposdecomida, urlimage, alimentos);
             return RedirectToAction("Index");
         }
@@ -47,10 +48,26 @@ namespace MyGym.Service.Controllers
             var result = new RecomendationRepository().Get(recomendationid);
             return View();
         }
+        [HttpGet]
+        public ActionResult Edit(int recomendationid)
+        {
+            var recomendation = new RecomendationRepository().Get(recomendationid);
+            var grupos = new GroupRepository().GetAll();
+            var tiemposcomida = MyGymContext.DB.TiempoDeComida.ToList();
+            return View(new RecomendationModel() { Grupos = grupos, Recomendacion = recomendation, TiemposComida = tiemposcomida });
+        }
+        [HttpPost]
+        public ActionResult Edit(int recomendationid, Recomendacion recomendation, IEnumerable<int> tiemposdecomida, string urlimage, IEnumerable<SeConforma> alimentos)
+        {
+            recomendation.ImageUrl = urlimage;
+            new RecomendationRepository().Update(recomendationid, recomendation, tiemposdecomida, alimentos);
+            return RedirectToAction("Index");
+        }
     }
     public class RecomendationModel
     {
         public IEnumerable<TiempoDeComida> TiemposComida { get; set; }
         public IEnumerable<Grupo> Grupos { get; set; }
+        public Recomendacion Recomendacion { get; set; }
     }
 }

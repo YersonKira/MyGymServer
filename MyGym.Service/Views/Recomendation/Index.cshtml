@@ -5,6 +5,7 @@
 }
 <a href="/Recomendation/Create" style="float:right">Nueva Recomendacion</a>
 <h1>Recomendaciones</h1>
+<label>Cantidad: @Model.Count</label>
 <ul class="list-group">
     @foreach (var item in Model)
     {
@@ -13,7 +14,7 @@
                 <a href="/Recomendation/Delete?recomendationid=@item.RecomendacionID" style="color:white;">Eliminar</a>
             </span>
             <span class="badge">
-                <a href="/Recomendation/Edit/@item.RecomendacionID" style="color:white;">Editar</a>
+                <a href="/Recomendation/Edit?recomendationid=@item.RecomendacionID" style="color:white;">Editar</a>
             </span>
             <a href="/Recomendation/Get?recomendationid=@item.RecomendacionID" >@item.Nombre</a>
         </li>

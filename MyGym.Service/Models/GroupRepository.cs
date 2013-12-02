@@ -9,9 +9,9 @@ namespace MyGym.Service.Models
 {
     public class GroupRepository
     {
-        public IEnumerable<Grupo> GetAll()
+        public List<Grupo> GetAll()
         {
-            return MyGymContext.DB.Grupo.AsEnumerable();
+            return MyGymContext.DB.Grupo.ToList();
         }
         public int Add(Grupo group)
         {

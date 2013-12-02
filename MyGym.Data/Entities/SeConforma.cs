@@ -16,6 +16,7 @@ namespace MyGym.Data.Entities
         [Key, Column(Order = 2)]
         public int AlimentoID { get; set; }
 
+        public string Descipcion { get; set; }
         public double Cantidad { get; set; } // En Gramos
 
         [ForeignKey("AlimentoID")]

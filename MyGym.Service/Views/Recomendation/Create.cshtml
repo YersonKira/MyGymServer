@@ -4,120 +4,118 @@
     Layout = "~/Views/MainLayout.cshtml";
 }
 <script src="~/Public/jquery.js"></script>
-<script type="text/javascript">
-    function AddTiempoComida() {
-        var value = $("#tiemposcomida").val();
-        var text = $("#tiemposcomida").val();
-        var input = $("<input>", {
-            type: 'hidden',
-            value: value,
-            name: 'tiemposdecomida'
-        });
-        $("#contenttiemposcomida").append(input);
-        $("#contenttiemposcomida").append("<b>" + text + "</b>");
-        $("#contenttiemposcomida").append("<br />");
-    }
-    function GroupChange() {
-        var groupid = $("#grupos").val();
-        $.get('/Recomendation/GetFoods', { groupid: groupid }, function (data) {
-            $("#alimentos").empty();
-            $.each(data, function (i, item) {
-                $("#alimentos").append("<option value=" + item.id +">" + item.name + "</option>");
-            });
-            
-        });
-    }
-    function AddAlimento() {
-        var alimentoid = $("#alimentos").val();
-        var index = $("#contenedoralimentos").children().length;
-        alert(index);
-        $("#contenedoralimentos").append(createAlimento(alimentoid, index));
-    }
-    function createAlimento(alimentoid, index) {
-        return $("<div></div").append(
-                $("<input />").attr({
-                    name: "alimentos[" + index + "].Cantidad",
-                    type: "text"
-                })
-            ).append("<b>" + alimentoid + "</b>").append(
-                $("<input />").attr({
-                    name: "alimentos[" + index + "].AlimentoID",
-                    type: "hidden",
-                    value: alimentoid
-                })
-            );
-    }
-</script>
-<h2>Recomendacion</h2>
+<script src="~/Public/javascript/recomendation.js"></script>
+<h2>Nueva Recomendacion</h2>
 <form action="/Recomendation/Create" method="post">
     <table>
         <tr>
             <td>Nombre : </td>
-            <td>
-                <input type="text" name="recomendation.Nombre" />
+            <td style="width: 500px;">
+                <input type="text" name="recomendation.Nombre" class="form-control" placeholder="BOQUERONES EN VINAGRE" />
             </td>
         </tr>
         <tr>
-            <td>Proparacion: </td>
-        </tr>
-        <tr>
-            <td>
-                <input type="text" name="recomendation.Preparacion" />
+            <td>Image URL : </td>
+            <td style="width: 500px;">
+                <input type="text" name="urlimage" class="form-control" placeholder="http://domain-name.com/image.jpg" />
             </td>
         </tr>
         <tr>
+            <td>Calorias : </td>
             <td>
-                Tiempos de Comida : 
+                <div class="input-group">
+                    <input type="text" name="recomendation.Calorias" class="form-control" placeholder="100,00" />
+                    <span class="input-group-addon">kcal</span>
+                </div>
             </td>
+        </tr>
+        <tr>
+            <td>Proteinas : </td>
             <td>
-                <select id="tiemposcomida">
+                <div class="input-group">
+                    <input type="text" name="recomendation.Proteinas" class="form-control" placeholder="100,00" />
+                    <span class="input-group-addon">gr</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>Grasas : </td>
+            <td>
+                <div class="input-group">
+                    <input type="text" name="recomendation.Grasas" class="form-control" placeholder="100,00" />
+                    <span class="input-group-addon">gr</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>Hidratos De Carbono : </td>
+            <td>
+                <div class="input-group">
+                    <input type="text" name="recomendation.HidratosDeCarbono" class="form-control" placeholder="100,00" />
+                    <span class="input-group-addon">gr</span>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="input-group">
+                <span class="input-group-btn">Tiempos de Comida: </span>
+                <select id="tiemposcomida" style="margin-left: 10px;" class="form-control">
                     @foreach (var item in Model.TiemposComida)
                     {
                         <option value="@item.TiempoDeComidaID">@item.Nombre</option>
                     }
                 </select>
-            </td>
-            <td>
-                <input type="button" value="Add" onclick="AddTiempoComida()" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div id="contenttiemposcomida"></div>
-            </td>
-        </tr>
-        <tr>
-            <td>Ingredientes</td>
-        </tr>
-        <tr>
-            <td>Grupo : </td>
-            <td>
-                <select id="grupos" onchange="GroupChange()">
-                    @foreach (var item in Model.Grupos)
-                    {
-                        <option value="@item.GrupoID">@item.Nombre</option>
-                    }
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td>Alimentos</td>
-            <td>
-                <select id="alimentos"></select>
-            </td>
-            <td>
-                <input type="button" value="Add Alimento" onclick="AddAlimento()" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div id="contenedoralimentos"></div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input type="submit" value="Guardar" />
-            </td>
-        </tr>
-    </table>
+                <span class="input-group-btn">
+                    <button onclick="AddTiempoComida()" class="btn btn-default" type="button">
+                        <img src="~/Public/icons/plus.png" width="20" />
+                    </button>
+                    @*<input type="button" value="Add" onclick="AddTiempoComida()" class="btn btn-default" />*@
+                </span>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div id="contenttiemposcomida"></div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <table>
+                <tr>
+                    <td>Grupo: </td>
+                    <td style="width:800px;">
+                        <select id="grupos" onchange="GroupChange()" style="margin-left: 10px;" class="form-control">
+                            @foreach (var item in Model.Grupos)
+                            {
+                                <option value="@item.GrupoID">@item.Nombre</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Alimento: </td>
+                    <td style="width:800px;">
+                        <div class="input-group">
+                            <select id="alimentos" style="margin-left: 10px;" class="form-control"></select>
+                            <span class="input-group-btn">
+                                <button onclick="AddAlimento()" class="btn btn-default" type="button">
+                                    <img src="~/Public/icons/plus.png" width="20" />
+                                </button>
+                                @*<input type="button" value="Add Alimento" onclick="AddAlimento()" class="form-control" />*@
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="panel-body">
+            <div id="contenedoralimentos"></div>
+            <h4>Preparacion</h4>
+            <textarea name="recomendation.Preparacion"></textarea>
+        </div>
+    </div>
+    <input type="submit" value="Guardar" class="btn btn-default" />
 </form>

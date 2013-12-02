@@ -27,25 +27,29 @@ namespace MyGym.Service.Models
             {
                 return APIFunctions.ErrorResult(string.Format(JsonMessage.NotFound, "Dieta"));
             }
-            var recomendations = MyGymContext.DB.Tiene.ToList().Where(item => item.DietaID == diet.DietaID);
-            if (recomendations.Count() > 0)
+            var mealtimes = MyGymContext.DB.PreferenciaTiempoComida.ToList().Where(item => item.UsuarioID == userid).Select(item => item.TiempoDeComida.Nombre);
+            List<UserDiet> result = new List<UserDiet>();
+            foreach (var item in mealtimes)
             {
-                List<UserDiet> result = new List<UserDiet>();
-                foreach (var item in recomendations)
+                var recomendation = GetByMealTime(item, diet.DietaID).ToList();
+                foreach (var rec in recomendation.Take(3))
                 {
-                    UserDiet userdiet = new UserDiet()
+                    var search = result.FirstOrDefault(r => r.RecomendationID == rec.RecomendacionID);
+                    if (search == null)
                     {
-                        DietID = diet.DietaID,
-                        ImageURL = item.Recomendacion.ImageUrl,
-                        Name = item.Recomendacion.Nombre,
-                        RecomendationID = item.RecomendacionID
-                    };
-                    userdiet.MealTime = item.Recomendacion.SeRecomiendaEn.ToList().Select(tc => tc.TiempoDeComida.Nombre.ToString());
-                    result.Add(userdiet);
+                        UserDiet userdiet = new UserDiet()
+                        {
+                            DietID = diet.DietaID,
+                            ImageURL = rec.ImageUrl,
+                            Name = rec.Nombre,
+                            RecomendationID = rec.RecomendacionID
+                        };
+                        userdiet.MealTime = rec.SeRecomiendaEn.ToList().Select(tc => tc.TiempoDeComida.Nombre.ToString());
+                        result.Add(userdiet);
+                    }
                 }
-                return APIFunctions.SuccessResult(result, JsonMessage.Success);
             }
-            return APIFunctions.ErrorResult(string.Format(JsonMessage.NotFound, "Recomendacion"));
+            return APIFunctions.SuccessResult(result, JsonMessage.Success);
         }
         public object GenerateDiet(int userid, UserInformation userdata)
         {
@@ -53,23 +57,37 @@ namespace MyGym.Service.Models
             if (DateTime.Now.Month > lastupdate.Month)
             {
                 var user = MyGymContext.DB.Usuario.Find(userid);
-                //DateTime olddateofbirth = user.FechaNacimiento;
-                //double oldweigth = user.Peso;
-                //double oldheight = user.Estatura;
-                MyGymContext.DB.Entry<Usuario>(user).CurrentValues.SetValues(APIFunctions.UserToUsuario(userdata));
-                MyGymContext.DB.Entry<Usuario>(user).State = System.Data.EntityState.Modified;
-                //if (userdata.DateOfBirth != null) user.FechaNacimiento = userdata.DateOfBirth;
-                //if (userdata.Weight != default(double)) user.Peso = userdata.Weight;
-                //if (userdata.Height != default(double)) user.Estatura = userdata.Height;
+                user.Estatura = userdata.Height;
+                user.FechaNacimiento = userdata.DateOfBirth;
+                user.Peso = userdata.Weight;
+                //MyGymContext.DB.Entry<Usuario>(user).CurrentValues.SetValues(APIFunctions.UserToUsuario(userdata));
+                //MyGymContext.DB.Entry<Usuario>(user).State = System.Data.EntityState.Modified;
                 MyGymContext.DB.SaveChanges();
-                //if (user.FechaNacimiento != olddateofbirth | user.Peso != oldweigth | user.Estatura != oldheight)
-                //{
-                //    this.CreateDiet(user.UsuarioID);
-                //}
                 this.CreateDiet(user.UsuarioID);
                 return APIFunctions.SuccessResult(new object(), JsonMessage.Success);
             }
             return APIFunctions.ErrorResult(JsonMessage.CannotChangeProperty);
+        }
+        public IEnumerable<Recomendacion> GetByMealTime(TiempoComida mealtime, int dietid)
+        { 
+            var allrecomendations = MyGymContext.DB.Tiene.ToList().Where(item => item.DietaID == dietid);
+            if (allrecomendations.Count() > 0)
+            {
+                var bymealtime = allrecomendations.Where(item => item.Recomendacion.SeRecomiendaEn.Select(tc => tc.TiempoDeComida.Nombre).Contains(mealtime)).ToList();
+                var size = bymealtime.Count();
+                if (size < 4)
+                {
+                    return bymealtime.Select(rec => rec.Recomendacion);
+                }
+                int startindex = MyGymContext.DB.Random.Next(size);
+                List<Recomendacion> result = new List<Recomendacion>();
+                for (int i = startindex; i < startindex + 4; i++)
+                {
+                    result.Add(bymealtime[i % size].Recomendacion);
+                }
+                return result.AsEnumerable();
+            }
+            return default(IEnumerable<Recomendacion>);
         }
         public void CreateDiet(int userid)
         {
@@ -77,7 +95,7 @@ namespace MyGym.Service.Models
             //this.DeleteDiet(userid);
             Usuario user = MyGymContext.DB.Usuario.Find(userid);
             // Obtenemos los tiempos de comida
-            var tcuser = user.TiemposDeComida.Select(s => s.TiempoDeComidaID);
+            var tcuser = MyGymContext.DB.PreferenciaTiempoComida.Where(item => item.UsuarioID == user.UsuarioID).Select(s => s.TiempoDeComidaID);
             int tiemposdecomida = tcuser.Count(); 
             // Indice de masa corporal del usuario
             double userIMC = GetIMC(user.Peso, user.Estatura);
@@ -98,12 +116,21 @@ namespace MyGym.Service.Models
                 double maxweigth = 24.99 * Math.Pow(user.Estatura, 2);
                 if (user.Peso < minweigth)
                 {
-                    porcentaje = (18.5 - userIMC) / 2.51;
+                    porcentaje = userIMC / 18.5;
+                    if (porcentaje > 1)
+                    {
+                        porcentaje = 1;
+                    }
                     GER = GetGER(minweigth, userage, user.Sexo);
                 }
                 else if (user.Peso > maxweigth)
                 {
-                    porcentaje = (userIMC - 24.99) / -15.01;
+                    porcentaje = userIMC / 40;
+                    if (porcentaje > 1)
+                    {
+                        porcentaje = 1;
+                    }
+                    porcentaje *= -1;
                     GER = GetGER(maxweigth, userage, user.Sexo);
                 }
             }
@@ -140,10 +167,11 @@ namespace MyGym.Service.Models
                                         proteinas / tiemposdecomida,
                                         hidratosdecarbono / tiemposdecomida,
                                         grasas / tiemposdecomida,
-                                        0.1
-                                    );
+                                        0.2
+                                    ).ToList();
                 // Adicionar la nueva dieta del dia
-                var newdiet = MyGymContext.DB.Dieta.FirstOrDefault(item => item.UsuarioID == user.UsuarioID && item.Dia == dias[i]);
+                var dia = dias[i];
+                var newdiet = MyGymContext.DB.Dieta.ToList().FirstOrDefault(item => item.UsuarioID == user.UsuarioID && item.Dia == dia);
                 newdiet.Calorias = kcal;
                 newdiet.Grasas = grasas;
                 newdiet.HidratosCarbono = hidratosdecarbono;
@@ -169,7 +197,7 @@ namespace MyGym.Service.Models
                 foreach (var item in recomendations)
                 {
                     var tcrec = item.SeRecomiendaEn.Select(s => s.TiempoDeComidaID);
-                    if ((tcrec.Intersect(tcuser)).Count() > 0)
+                    if ((tcrec.Intersect(tcuser)).Count() > 0 & ValidateRecomendation(item, newdiet, user, userstatus, tcuser))
                     {
                         MyGymContext.DB.Tiene.Add(new Tiene() 
                         { 
@@ -200,6 +228,38 @@ namespace MyGym.Service.Models
                 UsuarioID = user.UsuarioID
             });
             MyGymContext.DB.SaveChanges();
+        }
+        public bool ValidateRecomendation(Recomendacion recomendation, Dieta diet, Usuario user, EstadoNutricional userstatus, IEnumerable<int> mealtimes)
+        {
+            int tc = mealtimes.Count();
+            double error = 0.4;
+            double maxcalorias = (diet.Calorias / tc) + ((diet.Calorias / tc) * error);
+            double mincalorias = (diet.Calorias / tc) - ((diet.Calorias / tc) * error);
+            double maxgrasas = (diet.Grasas / tc) + ((diet.Grasas / tc) * error);
+            double mingrasas = (diet.Grasas / tc) - ((diet.Grasas / tc) * error);
+            if (userstatus == EstadoNutricional.Infrapeso | userstatus == EstadoNutricional.DelgadezSevera | userstatus == EstadoNutricional.DelgadezModerada | userstatus == EstadoNutricional.DelgadezNoMuyPronunciada)
+            {
+                if (recomendation.Calorias < mincalorias | recomendation.Grasas < mingrasas)
+                {
+                    return false;
+                }
+            }
+            else if (userstatus == EstadoNutricional.Sobrepeso | userstatus == EstadoNutricional.Preobeso | userstatus == EstadoNutricional.Obeso | userstatus == EstadoNutricional.ObesoTipoI | userstatus == EstadoNutricional.ObesoTipoII | userstatus == EstadoNutricional.ObesoTipoIII)
+            {
+                if (recomendation.Calorias > maxcalorias | recomendation.Grasas > maxgrasas)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                // Evitar exceso de grasas
+                if (recomendation.Grasas > maxgrasas)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         public object ConsumeRecomendation(int userid, int recomendationid, string date, string mealtime)
         {
@@ -255,25 +315,13 @@ namespace MyGym.Service.Models
             hidcarmax = hidratoscarbono + (hidratoscarbono * error);
             caloriasmin = calorias - (calorias * error);
             caloriasmax = calorias + (calorias * error);
-            return MyGymContext.DB.Recomendacion.Where(
-                item => CumpleRequerimientos(
-                    item,
-                    caloriasmin, caloriasmax,
-                    proteinasmin, proteinasmax,
-                    grasasmin, grasasmax,
-                    hidcarmin, hidcarmax));
-        }
-        private bool CumpleRequerimientos(
-            Recomendacion recomendacion,
-            double caloriasmin, double caloriasmax,
-            double proteinasmin, double proteinasmax,
-            double grasasmin, double grasasmax,
-            double hidcarmin, double hidcarmax)
-        {
-            return recomendacion.Calorias >= caloriasmin & recomendacion.Calorias <= caloriasmax &
-                recomendacion.Proteinas >= proteinasmin & recomendacion.Proteinas <= proteinasmax &
-                recomendacion.Grasas >= grasasmin & recomendacion.Grasas <= grasasmax &
-                recomendacion.HidratosDeCarbono >= hidcarmin & recomendacion.HidratosDeCarbono <= hidcarmax;
+            return MyGymContext.DB.Recomendacion.ToList().Where(item =>
+            {
+                return (item.Calorias >= caloriasmin & item.Calorias <= caloriasmax) |
+                (item.Proteinas >= proteinasmin & item.Proteinas <= proteinasmax) |
+                (item.Grasas >= grasasmin & item.Grasas <= grasasmax) |
+                (item.HidratosDeCarbono >= hidcarmin & item.HidratosDeCarbono <= hidcarmax);
+            });
         }
         private double GetGER(double peso, int userage, Sexo sexo)
         {

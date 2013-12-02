@@ -1,4 +1,5 @@
 ﻿using MyGym.Common;
+using MyGym.Common.Enum;
 using MyGym.Data;
 using MyGym.Data.Entities;
 using MyGym.Service.Controllers.API.ErrorHandler;
@@ -25,14 +26,13 @@ namespace MyGym.Service.Models
                 {
                     return APIFunctions.ErrorResult(JsonMessage.NotFound);
                 }
-                Usuario usuario = APIFunctions.UserToUsuario(user);
-                Usuario newuser = MyGymContext.DB.Usuario.Add(usuario);
+                Usuario newuser = MyGymContext.DB.Usuario.Add(APIFunctions.UserToUsuario(user));
                 MyGymContext.DB.SaveChanges();
                 // Inicializar dietas
                 foreach (var item in DietRepository.dias)
                 {
                     MyGymContext.DB.Dieta.Add(new Dieta() { 
-                        UsuarioID = usuario.UsuarioID,
+                        UsuarioID = newuser.UsuarioID,
                         Dia = item,
                         Grasas = 0,
                         Calorias = 0,
@@ -41,7 +41,15 @@ namespace MyGym.Service.Models
                     });
                     MyGymContext.DB.SaveChanges();
                 }
-                new DietRepository().CreateDiet(usuario.UsuarioID);
+                foreach (var item in MyGymContext.DB.TiempoDeComida.ToList())
+                {
+                    MyGymContext.DB.PreferenciaTiempoComida.Add(new PreferenciaTiempoComida() { 
+                        TiempoDeComidaID = item.TiempoDeComidaID,
+                        UsuarioID = newuser.UsuarioID
+                    }); 
+                    MyGymContext.DB.SaveChanges();
+                }
+                new DietRepository().CreateDiet(newuser.UsuarioID);
                 //new DietRepository().CreateDiet(newuser.UsuarioID);
                 return APIFunctions.SuccessResult(newuser.UsuarioID, JsonMessage.Success);
             }
@@ -139,12 +147,12 @@ namespace MyGym.Service.Models
         }
         private bool ValidateUser(string email, string nick)
         {
-            Usuario user = MyGymContext.DB.Usuario.FirstOrDefault(item => item.Email == email || item.Nick == nick);
+            Usuario user = MyGymContext.DB.Usuario.ToList().FirstOrDefault(item => item.Email == email || item.Nick == nick);
             return user == null;
         }
         public object LogIn(string user, string password)
         {
-            var result = MyGymContext.DB.Usuario.FirstOrDefault(item => (item.Email == user | item.Nick == user) & item.Password == password);
+            var result = MyGymContext.DB.Usuario.ToList().FirstOrDefault(item => (item.Email == user | item.Nick == user) & item.Password == password);
             if (result == null)
             {
                 return APIFunctions.ErrorResult(JsonMessage.ErrorLogin);

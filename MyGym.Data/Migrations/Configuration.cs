@@ -1,7 +1,5 @@
 namespace MyGym.Data.Migrations
 {
-    using MyGym.Common.Enum;
-    using MyGym.Data.Entities;
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
@@ -28,6 +26,9 @@ namespace MyGym.Data.Migrations
             //      new Person { FullName = "Brice Lambson" },
             //      new Person { FullName = "Rowan Miller" }
             //    );
+<<<<<<< HEAD
+            //
+=======
             //#region Tiempos de Comida
             //context.TiempoDeComida.Add(new TiempoDeComida()
             //{
@@ -569,6 +570,16 @@ namespace MyGym.Data.Migrations
                 context.SaveChanges();
             }
             #endregion
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 64473f01d116d33ec3d8f2b6f3e17369522f46f1
+=======
+>>>>>>> 64473f01d116d33ec3d8f2b6f3e17369522f46f1
+=======
+>>>>>>> 64473f01d116d33ec3d8f2b6f3e17369522f46f1
+=======
+>>>>>>> 64473f01d116d33ec3d8f2b6f3e17369522f46f1
         }
     }
 }

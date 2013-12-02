@@ -27,7 +27,7 @@ namespace MyGym.Service.Models
             MyGymContext.DB.SaveChanges();
             return true;
         }
-        public bool Update(int recid, Recomendacion rec)
+        public bool Update(int recid, Recomendacion rec, IEnumerable<int> tiemposComida, IEnumerable<SeConforma> alimentos)
         {
             Recomendacion recomendation = MyGymContext.DB.Recomendacion.Find(recid);
             if (recomendation == null)
@@ -42,6 +42,22 @@ namespace MyGym.Service.Models
                 recomendation.Nombre = rec.Nombre;
                 recomendation.Preparacion = rec.Preparacion;
                 recomendation.Proteinas = rec.Proteinas;
+                recomendation.ImageUrl = rec.ImageUrl;
+                // Eliminar anteriores tiempos de comida
+                var tc = recomendation.SeRecomiendaEn.ToList();
+                foreach (var item in tc)
+                {
+                    MyGymContext.DB.SeRecomienda.Remove(item);
+                }
+                MyGymContext.DB.SaveChanges();
+                // Eliminar alimentos anteriores
+                var foods = recomendation.SeConforma.ToList();
+                foreach (var item in foods)
+                {
+                    MyGymContext.DB.SeConforma.Remove(item);
+                }
+                MyGymContext.DB.SaveChanges();
+                AppendRecomendation(recomendation.RecomendacionID, tiemposComida, alimentos);
                 MyGymContext.DB.SaveChanges();
                 return true;
             }
@@ -56,28 +72,7 @@ namespace MyGym.Service.Models
             {
                 var recomendation = MyGymContext.DB.Recomendacion.Add(rec);
                 MyGymContext.DB.SaveChanges();
-                foreach (var item in tiemposComida)
-                {
-                    MyGymContext.DB.SeRecomienda.Add(new SeRecomienda() { 
-                        RecomendacionID = recomendation.RecomendacionID,
-                        TiempoDeComidaID = item
-                    });
-                    MyGymContext.DB.SaveChanges();
-                }
-                foreach (var item in alimentos)
-                {
-                    SeConforma alimento = MyGymContext.DB.SeConforma.Add(new SeConforma() { 
-                        AlimentoID = item.AlimentoID,
-                        Cantidad = item.Cantidad,
-                        RecomendacionID = recomendation.RecomendacionID
-                    });
-                    MyGymContext.DB.SaveChanges();
-                    recomendation.Proteinas += alimento.Alimento.Proteinas * (item.Cantidad / 100);
-                    recomendation.Calorias += alimento.Alimento.Calorias * (item.Cantidad / 100);
-                    recomendation.Grasas += alimento.Alimento.Grasas * (item.Cantidad / 100);
-                    recomendation.HidratosDeCarbono += alimento.Alimento.HidratosDeCarbono * (item.Cantidad / 100);
-                }
-                MyGymContext.DB.SaveChanges();
+                AppendRecomendation(recomendation.RecomendacionID, tiemposComida, alimentos);
                 return true;
             }
             catch (Exception)
@@ -106,6 +101,38 @@ namespace MyGym.Service.Models
                 })
             };
             return APIFunctions.SuccessResult(result, JsonMessage.Success);
+        }
+        private void AppendRecomendation(int recomendationid, IEnumerable<int> tiemposComida, IEnumerable<SeConforma> alimentos)
+        {
+            if (tiemposComida != null)
+            {
+                foreach (var item in tiemposComida)
+                {
+                    if (item != default(int))
+                    {
+                        MyGymContext.DB.SeRecomienda.Add(new SeRecomienda()
+                        {
+                            RecomendacionID = recomendationid,
+                            TiempoDeComidaID = item
+                        });
+                    }
+                }
+                MyGymContext.DB.SaveChanges();
+            }
+            foreach (var item in alimentos)
+            {
+                if (item != null)
+                {
+                    MyGymContext.DB.SeConforma.Add(new SeConforma()
+                    {
+                        AlimentoID = item.AlimentoID,
+                        Cantidad = item.Cantidad,
+                        Descipcion = item.Descipcion,
+                        RecomendacionID = recomendationid
+                    });
+                }
+            }
+            MyGymContext.DB.SaveChanges();
         }
     }
 }

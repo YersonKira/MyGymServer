@@ -29,7 +29,7 @@ namespace MyGym.Service.Models
             }
             return APIFunctions.ErrorResult(string.Format(JsonMessage.NotFound, "Reportes"));
         }
-        public object GetIntake(int userid, string filter = "week")
+        public object GetIntake(int userid, string filter)
         {
             filter = filter.ToLower();
             var data = default(IEnumerable<UserReport>);
@@ -52,8 +52,12 @@ namespace MyGym.Service.Models
                     break;
                 case "month":
                     {
-                        
+                        data = from consumo in MyGymContext.DB.Consumo.ToList().Take(150)
+                               group consumo by consumo.Fecha.Month into g
+                               select new UserReport() { 
+                                   Calories = g.Sum(item => item.Recomendacion.Calorias),
 
+                               };
                     }
                     break;
                 case "year":

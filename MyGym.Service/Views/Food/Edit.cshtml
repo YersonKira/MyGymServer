@@ -39,25 +39,25 @@
         <tr>
             <td>Calorias: </td>
             <td>
-                <input type="text" name="Calorias" value="@Model.Calorias" />
+                <input type="text" name="Calorias" value="@Model.Calorias.ToString().Replace(',', '.')" />
             </td>
         </tr>
         <tr>
             <td>Proteinas: </td>
             <td>
-                <input type="text" name="Proteinas" value="@Model.Proteinas" />
+                <input type="text" name="Proteinas" value="@Model.Proteinas.ToString().Replace(',', '.')" />
             </td>
         </tr>
         <tr>
             <td>Grasas</td>
             <td>
-                <input type="text" name="Grasas" value="@Model.Grasas" />
+                <input type="text" name="Grasas" value="@Model.Grasas.ToString().Replace(',', '.')" />
             </td>
         </tr>
         <tr>
             <td>Hidratos de Carbono</td>
             <td>
-                <input type="text" name="HidratosDeCarbono" value="@Model.HidratosDeCarbono"  />
+                <input type="text" name="HidratosDeCarbono" value="@Model.HidratosDeCarbono.ToString().Replace(',', '.')"  />
             </td>
         </tr>
         <tr>

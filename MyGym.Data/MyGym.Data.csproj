@@ -61,9 +61,9 @@
     <Compile Include="Entities\TiempoDeComida.cs" />
     <Compile Include="Entities\Tiene.cs" />
     <Compile Include="Entities\Usuario.cs" />
-    <Compile Include="Migrations\201311202202315_Initial.cs" />
-    <Compile Include="Migrations\201311202202315_Initial.Designer.cs">
-      <DependentUpon>201311202202315_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201311301705352_initial.cs" />
+    <Compile Include="Migrations\201311301705352_initial.Designer.cs">
+      <DependentUpon>201311301705352_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MyGymContext.cs" />
@@ -80,8 +80,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201311202202315_Initial.resx">
-      <DependentUpon>201311202202315_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201311301705352_initial.resx">
+      <DependentUpon>201311301705352_initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

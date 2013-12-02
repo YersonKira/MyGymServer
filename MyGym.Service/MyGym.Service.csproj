@@ -168,7 +168,14 @@
     <Content Include="Global.asax" />
     <Content Include="Models\APIHelper\JsonSamples\User\Sample.txt" />
     <Content Include="Models\APIHelper\JsonSamples\User\SamplePOST.txt" />
+    <Content Include="Public\css\easydropdown.css" />
+    <Content Include="Public\css\easydropdown.flat.css" />
+    <Content Include="Public\css\easydropdown.metro.css" />
     <Content Include="Public\css\metro-bootstrap.css" />
+    <Content Include="Public\icons\delete.png" />
+    <Content Include="Public\icons\plus.png" />
+    <Content Include="Public\javascript\jquery.easydropdown.min.js" />
+    <Content Include="Public\javascript\recomendation.js" />
     <Content Include="Public\jquery.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -247,6 +254,7 @@
     <Content Include="Views\Group\Edit.cshtml" />
     <Content Include="Views\Group\Index.cshtml" />
     <Content Include="Views\Recomendation\Create.cshtml" />
+    <Content Include="Views\Recomendation\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201311170232363_InitialCreate.resx">

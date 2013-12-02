@@ -9,9 +9,9 @@ namespace MyGym.Service.Models
 {
     public class FoodRepository
     {
-        public IEnumerable<Alimento> GetAll()
+        public List<Alimento> GetAll()
         {
-            return MyGymContext.DB.Alimento.AsEnumerable();
+            return MyGymContext.DB.Alimento.ToList();
         }
         public Alimento Get(int alimentoid)
         {
