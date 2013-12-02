@@ -94,5 +94,26 @@ namespace MyGym.Service.Models
                         lista.Add((k + i) % limite);
             return lista;
         }
+        public int GetCaloriesByDate(DateTime date, int userID)
+        {
+            var routine = from x in MyGymContext.DB.Rutina.ToList() where x.UsuarioID == userID select x;
+            if (routine == null)
+                return -1;
+            var activities = from x in MyGymContext.DB.Actividad.ToList() where x.RutinaID == routine.ToList()[0].RutinaID select x;
+            if (activities == null)
+                return -1;
+            var exercises = from x in activities.ToList() where x.Fecha == date select x.EjercicioID;
+            if (exercises == null)
+                return -1;
+            int calorias = 0;
+            foreach (var item in exercises)
+            {
+                var exercise = MyGymContext.DB.Ejercicio.Find(item);
+                if (exercise == null)
+                    return -1;
+                calorias += exercise.Calorias;
+            }
+            return calorias;
+        }
     }
 }
